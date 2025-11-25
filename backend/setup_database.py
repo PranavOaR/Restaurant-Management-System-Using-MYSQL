@@ -1,15 +1,61 @@
 #!/usr/bin/env python3
 """
 Database Setup Script for Restaurant Management System
-This script creates the MySQL database and all necessary tables with sample data
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PURPOSE:
+  This script initializes the complete MySQL database for the restaurant system.
+  
+FUNCTIONALITY:
+  1. Creates 'menu' database
+  2. Creates 14 menu category tables
+  3. Creates 1 orders transaction table
+  4. Populates menu tables with 192 sample items
+  5. Sets up all necessary indexes and constraints
+  
+DATABASE STRUCTURE:
+  Database Name: menu
+  Total Tables: 15 (14 menu + 1 orders)
+  Total Menu Items: 192
+  
+MENU CATEGORIES (14 Tables):
+  - beverages, chatitem, chineseitems, curry, dosaitem
+  - fruitjuice, icecreams, indianbreads, mealcombo, riceitem
+  - soup, southindian, starters, sweets
+
+USAGE:
+  python3 setup_database.py
+  
+REQUIREMENTS:
+  - MySQL server running on localhost
+  - Root user access to MySQL
+  - Python package: mysql-connector-python
+
+NOTE: This is a legacy setup script. The database is typically already created.
+Use this script if you need to reset the database to initial state.
+
+⚠️  WARNING: Running this will replace existing data!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 """
 
 import mysql.connector as con
 from mysql.connector import Error
 import sys
 
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# DATABASE CONNECTION
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 def create_connection():
-    """Create connection to MySQL server without specifying database"""
+    """
+    Create connection to MySQL server (without selecting database)
+    
+    Returns:
+        connection object or None if connection fails
+    
+    Note:
+        This connects to MySQL root, not a specific database
+        Database selection happens after connection is established
+    """
     try:
         connection = con.connect(
             host='localhost',
@@ -22,7 +68,37 @@ def create_connection():
         return None
 
 def create_database_and_tables():
-    """Create database and all tables"""
+    """
+    Create MySQL database and all required tables
+    
+    This function performs:
+      1. Creates 'menu' database (if not exists)
+      2. Creates 14 menu category tables with schema
+      3. Creates 1 orders transaction table
+      4. Inserts sample data (192 items across categories)
+    
+    Tables Created:
+      Menu Tables (each has: SL INT, ItemName VARCHAR(255), Price DECIMAL(10,2))
+        - beverages, chatitem, chineseitems, curry, dosaitem
+        - fruitjuice, icecreams, indianbreads, mealcombo, riceitem
+        - soup, southindian, starters, sweets
+      
+      Transaction Table (orders):
+        - OrderID INT AUTO_INCREMENT PRIMARY KEY
+        - ItemName VARCHAR(255) NOT NULL
+        - Price DECIMAL(10,2) NOT NULL
+        - Quantity INT NOT NULL
+        - TotalPrice DECIMAL(10,2) NOT NULL
+        - OrderTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    
+    Data:
+      - Each category table has items with SL (Serial), Name, and Price
+      - Prices in Indian Rupees (Rs)
+      - Sample menu items for demonstration
+    
+    Returns:
+        bool: True if successful, False if failed
+    """
     connection = create_connection()
     if connection is None:
         return False
@@ -319,11 +395,37 @@ def create_database_and_tables():
         connection.close()
 
 if __name__ == "__main__":
-    print("Restaurant Management System - Database Setup")
-    print("="*60)
-    print("\nThis script will create the MySQL database and tables")
-    print("Required: MySQL Server running on localhost")
-    print("\nMake sure MySQL is running before proceeding...\n")
+    """
+    Main Entry Point - Execute Database Setup
+    
+    Execution Flow:
+      1. Display header and requirements
+      2. Check MySQL availability
+      3. Create database and tables
+      4. Load sample data
+      5. Show connection details
+      6. Exit with status code
+    
+    Exit Codes:
+      0 = Success (database created successfully)
+      1 = Failure (see error messages for details)
+    
+    Requirements Before Running:
+      ✓ MySQL server running on localhost
+      ✓ Root user access available
+      ✓ Port 3306 open and accessible
+    
+    Connection Information:
+      Host: localhost
+      User: root
+      Password: (see hardcoded password in script)
+      Database: menu
+    
+    After Setup:
+      - Use demo.py to test database
+      - Use Express.js API backend for REST access
+      - Use Next.js frontend for web interface
+    """
     
     try:
         success = create_database_and_tables()

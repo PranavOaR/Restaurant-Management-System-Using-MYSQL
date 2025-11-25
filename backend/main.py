@@ -1,14 +1,52 @@
 #!/usr/bin/env python3
 """
-Restaurant Management System - Automated Demo
-This script demonstrates the application functionality
+Restaurant Management System - Automated Demo Script
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+This script demonstrates the complete functionality of the Restaurant Management System.
+It showcases:
+  1. Viewing menu items by category
+  2. Placing orders with multiple items
+  3. Calculating taxes and totals
+  4. Storing orders in the database
+  5. Retrieving order history
+  6. Displaying database statistics
+
+USAGE:
+  python3 demo.py
+
+REQUIREMENTS:
+  - MySQL server running on localhost
+  - Database 'menu' created with all tables
+  - Python packages: mysql-connector-python, tabulate
+
+NOTE: This is a legacy Python demo. The project now uses Express.js REST API
+and Next.js frontend. Use this script for testing database connectivity.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 """
 
 import mysql.connector as con
 from tabulate import tabulate
 
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# DATABASE CONNECTION
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 def connect_to_database():
-    """Connect to MySQL database"""
+    """
+    Establish connection to MySQL database
+    
+    Returns:
+        connection object or None if connection fails
+    
+    Database Details:
+        Host: localhost (127.0.0.1)
+        User: root
+        Password: Welcomenav1#
+        Database: menu
+    
+    Raises:
+        Exception: If connection to MySQL fails
+    """
     try:
         connection = con.connect(
             host='localhost',
@@ -22,7 +60,20 @@ def connect_to_database():
         return None
 
 def demo_display_menu():
-    """Demo: Display menu items"""
+    """
+    DEMO 1: Display menu items from each category
+    
+    This function:
+      - Connects to the database
+      - Queries 5 sample categories
+      - Displays first 5 items from each category
+      - Shows item details: Serial Number, Name, Price
+    
+    Demonstrates:
+      - Database query execution
+      - Data retrieval and formatting
+      - Error handling
+    """
     print("\n" + "="*80)
     print("DEMO 1: VIEWING MENU BY CATEGORY")
     print("="*80)
@@ -52,7 +103,28 @@ def demo_display_menu():
     connection.close()
 
 def demo_place_order():
-    """Demo: Place an order"""
+    """
+    DEMO 2: Place an order with multiple items
+    
+    This function:
+      - Creates a sample order with 3 items from different categories
+      - Retrieves item details from database
+      - Calculates individual item totals
+      - Computes taxes (CGST 2.5% + SGST 2.5%)
+      - Stores order data in the 'orders' table
+    
+    Order Flow:
+      1. Select items from menu
+      2. Calculate quantities and prices
+      3. Add to cart with pricing
+      4. Apply taxes
+      5. Insert order records into database
+    
+    Tax Calculation:
+      - CGST (Central Goods and Services Tax): 2.5%
+      - SGST (State Goods and Services Tax): 2.5%
+      - Total Tax: 5%
+    """
     print("\n" + "="*80)
     print("DEMO 2: PLACING AN ORDER")
     print("="*80)
@@ -124,7 +196,28 @@ def demo_place_order():
         cursor.close()
 
 def demo_view_orders():
-    """Demo: View all orders"""
+    """
+    DEMO 3: View order history from database
+    
+    This function:
+      - Retrieves all orders from the 'orders' table
+      - Displays last 10 orders in tabular format
+      - Shows: Order ID, Item, Price, Quantity, Total, Timestamp
+      - Calculates aggregate statistics
+    
+    Statistics Shown:
+      - Total number of orders placed
+      - Total revenue generated
+      - Can be extended to show average order value
+    
+    Database Table (orders):
+      - OrderID: Auto-increment primary key
+      - ItemName: Name of ordered item
+      - Price: Unit price of item
+      - Quantity: Number of items ordered
+      - TotalPrice: Quantity × Price (before tax)
+      - OrderTime: Timestamp of order (auto-set to NOW())
+    """
     print("\n" + "="*80)
     print("DEMO 3: VIEWING ORDER HISTORY")
     print("="*80)
@@ -164,7 +257,37 @@ def demo_view_orders():
         connection.close()
 
 def demo_database_stats():
-    """Demo: Show database statistics"""
+    """
+    DEMO 4: Display database statistics
+    
+    This function:
+      - Counts menu items in each of 14 categories
+      - Shows total menu items in the database
+      - Displays table count and structure info
+    
+    Database Structure:
+      - 14 menu item tables (one per category)
+      - 1 orders table (transaction log)
+      - Total: 15 tables
+    
+    Menu Categories (14):
+      1. beverages - 12 items (coffee, tea, etc.)
+      2. chatitem - 22 items
+      3. chineseitems - 17 items
+      4. curry - 26 items (popular curries)
+      5. dosaitem - 16 items (South Indian speciality)
+      6. fruitjuice - 10 items (fresh juices)
+      7. icecreams - 8 items (desserts)
+      8. indianbreads - 16 items (breads, naans)
+      9. mealcombo - 7 items (combo meals)
+      10. riceitem - 15 items (rice dishes)
+      11. soup - 5 items (soups)
+      12. southindian - 17 items (idli, dosa, etc.)
+      13. starters - 16 items (appetizers)
+      14. sweets - 5 items (desserts)
+    
+    Total Items: 192
+    """
     print("\n" + "="*80)
     print("DEMO 4: DATABASE STATISTICS")
     print("="*80)
@@ -210,7 +333,28 @@ def demo_database_stats():
         connection.close()
 
 def main():
-    """Run all demos"""
+    """
+    Main entry point - Run all demo sequences
+    
+    Execution Order:
+      1. Connection Test - Verify MySQL connectivity
+      2. Demo 1 - View Menu (browse items)
+      3. Demo 2 - Place Order (cart + checkout)
+      4. Demo 3 - View Orders (order history)
+      5. Demo 4 - Database Stats (system info)
+    
+    Flow:
+      - Displays header banner
+      - Tests database connection
+      - Runs 4 demo scenarios sequentially
+      - Shows final summary
+      - Displays instructions for other apps
+    
+    Error Handling:
+      - Aborts if database connection fails
+      - Catches exceptions in each demo
+      - Provides informative error messages
+    """
     print("\n" + "█"*80)
     print("█" + " "*78 + "█")
     print("█" + "🍽️  RESTAURANT MANAGEMENT SYSTEM - AUTOMATED DEMO ".center(78) + "█")
