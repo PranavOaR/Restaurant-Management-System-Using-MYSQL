@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { SilkBackground } from './components/SilkBackground';
 
 export default function Home() {
   const [stats, setStats] = useState({ totalOrders: 0, totalRevenue: 0 });
@@ -27,9 +28,14 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
+    <div className="min-h-screen bg-gray-900 relative overflow-hidden">
+      {/* Silk Background Animation */}
+      <SilkBackground />
+
+      {/* Content Overlay */}
+      <div className="relative z-10">
       {/* Header */}
-      <header className="bg-white shadow-sm">
+      <header className="bg-white bg-opacity-95 shadow-sm relative z-20">
         <div className="container py-4 flex justify-between items-center">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
             🚀 OrderXpress
@@ -53,7 +59,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="bg-white rounded-lg shadow-lg p-12 mb-8 text-center"
+            className="bg-white bg-opacity-95 rounded-lg shadow-2xl p-12 mb-8 text-center backdrop-blur-sm"
           >
             <h2 className="text-4xl font-bold text-gray-800 mb-4">Welcome to OrderXpress</h2>
             <p className="text-lg text-gray-600 mb-8">
@@ -120,7 +126,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 * idx }}
-                className="card"
+                className="card bg-white bg-opacity-90 backdrop-blur-sm"
               >
                 <div className="text-4xl mb-2">{feature.icon}</div>
                 <h3 className="text-xl font-bold text-gray-800 mb-2">{feature.title}</h3>
@@ -132,11 +138,12 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-8 mt-16">
+      <footer className="bg-gray-800 bg-opacity-95 text-white py-8 mt-16 relative z-20">
         <div className="container text-center">
           <p>&copy; 2025 Restaurant Management System. All rights reserved.</p>
         </div>
       </footer>
+      </div>
     </div>
   );
 }
