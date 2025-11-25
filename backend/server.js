@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const mysql = require('mysql2/promise');
+const mysql = require('mysql2');
 require('dotenv').config();
 
 const app = express();
@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // MySQL Connection Pool
-const pool = mysql.createPool({
+const dbConfig = {
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || 'Welcomenav1#',
@@ -20,16 +20,25 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-  enableKeepAlive: true,
-  keepAliveInitialDelayMs: 0,
+};
+
+console.log('📊 DB Config:', {
+  host: dbConfig.host,
+  user: dbConfig.user,
+  database: dbConfig.database,
+  password: dbConfig.password ? '***' : 'not set'
 });
 
+const pool = mysql.createPool(dbConfig);
+
 // Test database connection
-pool.getConnection().then(connection => {
-  console.log('✓ Connected to MySQL database');
-  connection.release();
-}).catch(err => {
-  console.error('✗ Failed to connect to MySQL:', err);
+pool.getConnection((err, connection) => {
+  if (err) {
+    console.error('✗ Failed to connect to MySQL:', err.message);
+  } else {
+    console.log('✓ Connected to MySQL database');
+    connection.release();
+  }
 });
 
 // ROUTES
@@ -49,106 +58,100 @@ app.get('/api/categories', async (req, res) => {
 });
 
 // Get menu items by category
-app.get('/api/menu/:category', async (req, res) => {
-  try {
-    const { category } = req.params;
-    const connection = await pool.getConnection();
-    
-    const [rows] = await connection.query(
-      `SELECT SL, ItemName, Price FROM ${category} ORDER BY SL`
-    );
-    
-    connection.release();
-    res.json({ success: true, data: rows });
-  } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
-  }
+app.get('/api/menu/:category', (req, res) => {
+  const { category } = req.params;
+  pool.query(
+    `SELECT SL, ItemName, Price FROM ${category} ORDER BY SL`,
+    (err, rows) => {
+      if (err) {
+        return res.status(500).json({ success: false, error: err.message });
+      }
+      res.json({ success: true, data: rows });
+    }
+  );
 });
 
 // Get single menu item
-app.get('/api/menu/:category/:id', async (req, res) => {
-  try {
-    const { category, id } = req.params;
-    const connection = await pool.getConnection();
-    
-    const [rows] = await connection.query(
-      `SELECT SL, ItemName, Price FROM ${category} WHERE SL = ?`,
-      [id]
-    );
-    
-    connection.release();
-    
-    if (rows.length === 0) {
-      return res.status(404).json({ success: false, error: 'Item not found' });
+app.get('/api/menu/:category/:id', (req, res) => {
+  const { category, id } = req.params;
+  pool.query(
+    `SELECT SL, ItemName, Price FROM ${category} WHERE SL = ?`,
+    [id],
+    (err, rows) => {
+      if (err) {
+        return res.status(500).json({ success: false, error: err.message });
+      }
+      if (rows.length === 0) {
+        return res.status(404).json({ success: false, error: 'Item not found' });
+      }
+      res.json({ success: true, data: rows[0] });
     }
-    
-    res.json({ success: true, data: rows[0] });
-  } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
-  }
+  );
 });
 
 // Place order
-app.post('/api/orders', async (req, res) => {
-  try {
-    const { items } = req.body;
-    
-    if (!items || items.length === 0) {
-      return res.status(400).json({ success: false, error: 'No items in order' });
-    }
-    
-    const connection = await pool.getConnection();
-    
-    for (const item of items) {
-      await connection.query(
-        'INSERT INTO orders (ItemName, Price, Quantity, TotalPrice) VALUES (?, ?, ?, ?)',
-        [item.itemName, item.price, item.quantity, item.totalPrice]
-      );
-    }
-    
-    connection.release();
-    res.json({ success: true, message: 'Order placed successfully' });
-  } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+app.post('/api/orders', (req, res) => {
+  const { items } = req.body;
+  
+  if (!items || items.length === 0) {
+    return res.status(400).json({ success: false, error: 'No items in order' });
   }
+  
+  let completed = 0;
+  let hasError = false;
+  
+  items.forEach((item) => {
+    pool.query(
+      'INSERT INTO orders (ItemName, Price, Quantity, TotalPrice) VALUES (?, ?, ?, ?)',
+      [item.itemName, item.price, item.quantity, item.totalPrice],
+      (err) => {
+        if (err && !hasError) {
+          hasError = true;
+          return res.status(500).json({ success: false, error: err.message });
+        }
+        completed++;
+        if (completed === items.length && !hasError) {
+          res.json({ success: true, message: 'Order placed successfully' });
+        }
+      }
+    );
+  });
 });
 
 // Get all orders
-app.get('/api/orders', async (req, res) => {
-  try {
-    const connection = await pool.getConnection();
-    
-    const [rows] = await connection.query(
-      'SELECT OrderID, ItemName, Price, Quantity, TotalPrice, OrderTime FROM orders ORDER BY OrderTime DESC LIMIT 50'
-    );
-    
-    connection.release();
-    res.json({ success: true, data: rows });
-  } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
-  }
+app.get('/api/orders', (req, res) => {
+  pool.query(
+    'SELECT OrderID, ItemName, Price, Quantity, TotalPrice, OrderTime FROM orders ORDER BY OrderTime DESC LIMIT 50',
+    (err, rows) => {
+      if (err) {
+        return res.status(500).json({ success: false, error: err.message });
+      }
+      res.json({ success: true, data: rows });
+    }
+  );
 });
 
 // Get order statistics
-app.get('/api/statistics', async (req, res) => {
-  try {
-    const connection = await pool.getConnection();
+app.get('/api/statistics', (req, res) => {
+  pool.query('SELECT COUNT(*) as count FROM orders', (err, result1) => {
+    if (err) {
+      return res.status(500).json({ success: false, error: err.message });
+    }
     
-    const [totalOrders] = await connection.query('SELECT COUNT(*) as count FROM orders');
-    const [totalRevenue] = await connection.query('SELECT SUM(TotalPrice) as total FROM orders');
-    
-    connection.release();
-    
-    res.json({
-      success: true,
-      data: {
-        totalOrders: totalOrders[0].count,
-        totalRevenue: totalRevenue[0].total || 0
+    pool.query('SELECT SUM(TotalPrice) as total FROM orders', (err, result2) => {
+      if (err) {
+        return res.status(500).json({ success: false, error: err.message });
       }
+      
+      res.json({
+        success: true,
+        data: {
+          totalOrders: result1[0].count,
+          totalRevenue: result2[0].total || 0
+        }
+      });
     });
-  } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
-  }
+  });
 });
 
 // Health check
