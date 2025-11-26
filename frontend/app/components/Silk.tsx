@@ -1,8 +1,11 @@
 /* eslint-disable react/no-unknown-property */
-import React, { forwardRef, useMemo, useRef, useLayoutEffect } from 'react';
-import { Canvas, useFrame, useThree, RootState } from '@react-three/fiber';
+'use client';
+
+import React, { forwardRef, useMemo, useRef, useLayoutEffect, Suspense } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import type { RootState } from '@react-three/fiber';
 import { Color, Mesh, ShaderMaterial } from 'three';
-import { IUniform } from 'three';
+import type { IUniform } from 'three';
 
 type NormalizedRGB = [number, number, number];
 
@@ -126,9 +129,14 @@ export interface SilkProps {
   rotation?: number;
 }
 
-const Silk: React.FC<SilkProps> = ({ speed = 5, scale = 1, color = '#7B7481', noiseIntensity = 1.5, rotation = 0 }) => {
-  const meshRef = useRef<Mesh>(null);
-
+const SilkContent: React.FC<SilkProps & { meshRef: React.RefObject<Mesh> }> = ({
+  speed = 5,
+  scale = 1,
+  color = '#7B7481',
+  noiseIntensity = 1.5,
+  rotation = 0,
+  meshRef,
+}) => {
   const uniforms = useMemo<SilkUniforms>(
     () => ({
       uSpeed: { value: speed },
@@ -136,15 +144,23 @@ const Silk: React.FC<SilkProps> = ({ speed = 5, scale = 1, color = '#7B7481', no
       uNoiseIntensity: { value: noiseIntensity },
       uColor: { value: new Color(...hexToNormalizedRGB(color)) },
       uRotation: { value: rotation },
-      uTime: { value: 0 }
+      uTime: { value: 0 },
     }),
     [speed, scale, noiseIntensity, color, rotation]
   );
 
+  return <SilkPlane ref={meshRef} uniforms={uniforms} />;
+};
+
+const Silk: React.FC<SilkProps> = (props) => {
+  const meshRef = useRef<Mesh>(null);
+
   return (
-    <Canvas dpr={[1, 2]} frameloop="always" style={{ position: 'absolute', inset: 0 }}>
-      <SilkPlane ref={meshRef} uniforms={uniforms} />
-    </Canvas>
+    <Suspense fallback={<div className="w-full h-full bg-gradient-to-b from-purple-900 to-gray-900" />}>
+      <Canvas dpr={[1, 2]} frameloop="always" style={{ position: 'absolute', inset: 0 }}>
+        <SilkContent {...props} meshRef={meshRef} />
+      </Canvas>
+    </Suspense>
   );
 };
 
