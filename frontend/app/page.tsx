@@ -3,7 +3,10 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { SilkBackground } from './components/SilkBackground';
+import dynamic from 'next/dynamic';
+
+// Dynamically import Silk to avoid SSR issues with Three.js
+const Silk = dynamic(() => import('./components/Silk'), { ssr: false });
 
 export default function Home() {
   const [stats, setStats] = useState({ totalOrders: 0, totalRevenue: 0 });
@@ -30,7 +33,15 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-900 relative overflow-hidden">
       {/* Silk Background Animation */}
-      <SilkBackground />
+      <div className="absolute inset-0 z-0">
+        <Silk
+          speed={5}
+          scale={1}
+          color="#7B7481"
+          noiseIntensity={1.5}
+          rotation={0}
+        />
+      </div>
 
       {/* Content Overlay */}
       <div className="relative z-10">
