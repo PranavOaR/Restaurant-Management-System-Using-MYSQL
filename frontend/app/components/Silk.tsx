@@ -17,93 +17,148 @@ const Silk: React.FC<SilkProps> = ({
   noiseIntensity = 1.5,
   rotation = 0,
 }) => {
-  const animationDuration = `${6 / speed}s`;
-
   return (
-    <div className="absolute inset-0 overflow-hidden bg-gradient-to-b from-gray-900 via-purple-900 to-gray-900">
+    <div className="absolute inset-0 overflow-hidden">
       <style>{`
-        @keyframes silk-flow {
+        @keyframes silk-shimmer {
           0% {
-            transform: translateY(-100%);
-            opacity: 0.8;
+            background-position: 0% 0%;
+          }
+          25% {
+            background-position: 100% 0%;
           }
           50% {
-            opacity: 1;
+            background-position: 100% 100%;
+          }
+          75% {
+            background-position: 0% 100%;
           }
           100% {
-            transform: translateY(100%);
-            opacity: 0.8;
+            background-position: 0% 0%;
           }
         }
 
-        @keyframes silk-wave {
+        @keyframes silk-wave-1 {
           0%, 100% {
-            d: path('M0,50 Q25,25 50,50 T100,50 L100,0 L0,0 Z');
+            transform: translateY(-10%) translateX(0) skewY(1deg);
+          }
+          25% {
+            transform: translateY(-5%) translateX(2%) skewY(-1deg);
           }
           50% {
-            d: path('M0,30 Q25,10 50,30 T100,30 L100,0 L0,0 Z');
+            transform: translateY(0%) translateX(0) skewY(1deg);
+          }
+          75% {
+            transform: translateY(-5%) translateX(-2%) skewY(-1deg);
           }
         }
 
-        .silk-background {
+        @keyframes silk-wave-2 {
+          0%, 100% {
+            transform: translateY(0%) translateX(0) skewY(-1deg);
+          }
+          25% {
+            transform: translateY(-8%) translateX(-2%) skewY(1deg);
+          }
+          50% {
+            transform: translateY(-5%) translateX(0) skewY(-1deg);
+          }
+          75% {
+            transform: translateY(0%) translateX(2%) skewY(1deg);
+          }
+        }
+
+        @keyframes silk-wave-3 {
+          0%, 100% {
+            transform: translateY(-5%) translateX(0) skewY(0deg);
+          }
+          25% {
+            transform: translateY(-3%) translateX(1%) skewY(0.5deg);
+          }
+          50% {
+            transform: translateY(0%) translateX(0) skewY(0deg);
+          }
+          75% {
+            transform: translateY(-3%) translateX(-1%) skewY(-0.5deg);
+          }
+        }
+
+        .silk-container {
           position: absolute;
-          width: 100%;
-          height: 100%;
-          opacity: 0.6;
+          inset: 0;
+          background: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #16213e 75%, #1a1a2e 100%);
+          background-size: 400% 400%;
+          animation: silk-shimmer ${20 / speed}s ease-in-out infinite;
+          overflow: hidden;
         }
 
         .silk-layer {
           position: absolute;
-          width: 200%;
-          height: 150%;
-          animation: silk-flow ${animationDuration} ease-in-out infinite;
+          inset: 0;
+          opacity: 0.4;
+          mix-blend-mode: screen;
         }
 
         .silk-layer:nth-child(1) {
-          animation-delay: 0s;
-          filter: drop-shadow(0 0 ${noiseIntensity * 10}px rgba(123, 116, 129, 0.5));
+          animation: silk-wave-1 ${8 / speed}s ease-in-out infinite;
+          background: radial-gradient(
+            ellipse 80% 30% at 50% 50%,
+            rgba(123, 116, 129, 0.8) 0%,
+            rgba(123, 116, 129, 0.3) 40%,
+            transparent 70%
+          );
         }
 
         .silk-layer:nth-child(2) {
-          animation-delay: -${parseFloat(animationDuration) * 0.33}s;
-          filter: drop-shadow(0 0 ${noiseIntensity * 8}px rgba(147, 112, 219, 0.3));
+          animation: silk-wave-2 ${12 / speed}s ease-in-out infinite;
+          animation-delay: -${4 / speed}s;
+          background: radial-gradient(
+            ellipse 60% 40% at 50% 30%,
+            rgba(147, 112, 219, 0.6) 0%,
+            rgba(147, 112, 219, 0.2) 50%,
+            transparent 80%
+          );
         }
 
         .silk-layer:nth-child(3) {
-          animation-delay: -${parseFloat(animationDuration) * 0.66}s;
-          filter: drop-shadow(0 0 ${noiseIntensity * 6}px rgba(123, 116, 129, 0.2));
+          animation: silk-wave-3 ${10 / speed}s ease-in-out infinite;
+          animation-delay: -${2 / speed}s;
+          background: radial-gradient(
+            ellipse 100% 50% at 50% 60%,
+            rgba(123, 116, 129, 0.5) 0%,
+            rgba(123, 116, 129, 0.1) 60%,
+            transparent 90%
+          );
         }
 
-        .silk-layer svg {
-          width: 100%;
-          height: 100%;
-          transform: rotate(${rotation}deg);
-        }
-
-        .silk-wave {
-          fill: ${color};
-          filter: blur(0.5px);
+        .silk-noise {
+          position: absolute;
+          inset: 0;
+          opacity: 0.15;
+          mix-blend-mode: overlay;
+          background-image: 
+            repeating-linear-gradient(
+              90deg,
+              transparent,
+              transparent 2px,
+              rgba(255, 255, 255, 0.1) 2px,
+              rgba(255, 255, 255, 0.1) 4px
+            ),
+            repeating-linear-gradient(
+              0deg,
+              transparent,
+              transparent 2px,
+              rgba(255, 255, 255, 0.1) 2px,
+              rgba(255, 255, 255, 0.1) 4px
+            );
         }
       `}</style>
 
-      <div className="silk-background">
-        <div className="silk-layer">
-          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path className="silk-wave" d="M0,50 Q300,0 600,50 T1200,50 L1200,120 L0,120 Z" />
-          </svg>
-        </div>
-
-        <div className="silk-layer">
-          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path className="silk-wave" d="M0,60 Q300,10 600,60 T1200,60 L1200,120 L0,120 Z" style={{ opacity: 0.6 }} />
-          </svg>
-        </div>
-
-        <div className="silk-layer">
-          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path className="silk-wave" d="M0,70 Q300,20 600,70 T1200,70 L1200,120 L0,120 Z" style={{ opacity: 0.3 }} />
-          </svg>
-        </div>
+      <div className="silk-container">
+        <div className="silk-layer" style={{ transform: `rotate(${rotation}deg)` }} />
+        <div className="silk-layer" style={{ transform: `rotate(${rotation + 120}deg)` }} />
+        <div className="silk-layer" style={{ transform: `rotate(${rotation + 240}deg)` }} />
+        <div className="silk-noise" />
       </div>
     </div>
   );
