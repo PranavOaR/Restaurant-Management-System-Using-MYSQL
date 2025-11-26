@@ -3,10 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import dynamic from 'next/dynamic';
-
-// Dynamically import Silk to avoid SSR issues with Three.js
-const Silk = dynamic(() => import('./components/Silk'), { ssr: false });
+import Silk from './components/Silk';
 
 export default function Home() {
   const [stats, setStats] = useState({ totalOrders: 0, totalRevenue: 0 });
