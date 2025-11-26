@@ -1,42 +1,125 @@
 # 🍽️ Restaurant Management System Using MySQL
 
-A modern, full-stack restaurant management system built with **Next.js**, **Express.js**, and **MySQL**. Features a responsive customer portal for ordering, an admin dashboard for order management, and a robust REST API backend.
+A modern, full-stack restaurant management system built with **Next.js**, **Express.js**, and **MySQL**. Features a responsive customer portal for ordering, interactive shopping cart with beautiful animations, and a robust REST API backend.
 
 [![Node.js](https://img.shields.io/badge/Node.js-v24.9.0-green?logo=node.js)](https://nodejs.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-14.0.3-black?logo=next.js)](https://nextjs.org/)
 [![Express](https://img.shields.io/badge/Express.js-4.18.2-blue?logo=express)](https://expressjs.com/)
-[![MySQL](https://img.shields.io/badge/MySQL-8.0+-blue?logo=mysql)](https://www.mysql.com/)
+[![MySQL](https://img.shields.io/badge/MySQL-9.5.0-blue?logo=mysql)](https://www.mysql.com/)
 [![React](https://img.shields.io/badge/React-18.3.1-blue?logo=react)](https://react.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.3.0-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
 [![License](https://img.shields.io/badge/License-MIT-green)](#license)
+
+---
+
+## 📊 Database Schema (ER Diagram)
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│           RESTAURANT MANAGEMENT SYSTEM - ER DIAGRAM                  │
+│                    Database: "menu" (MySQL 9.5.0)                    │
+└──────────────────────────────────────────────────────────────────────┘
+
+MENU ITEM TABLES (14 Categories - Same Structure):
+┌─────────────────────────────────────┐
+│    MENU_CATEGORY_TEMPLATE           │
+├─────────────────────────────────────┤
+│ PK  SL          INTEGER             │ ← Primary Key (1-26)
+│     ItemName    VARCHAR(255)        │ ← Item description
+│     Price       INTEGER             │ ← Price in rupees
+└─────────────────────────────────────┘
+
+MENU CATEGORIES (14 tables):
+   1. beverages       → 12 items (Coffee, Tea, Juices, Milk)
+   2. chatitem        → 22 items (Bhel Puri, Samosa, Pav Bhaji)
+   3. chineseitems    → 17 items (Noodles, Fried Rice, Chopsuey)
+   4. curry           → 26 items (Paneer Butter Masala, Dal, Kohlapuri)
+   5. dosaitem        → 16 items (Plain Dosa, Masala Dosa, Paper Dosa)
+   6. fruitjuice      → 10 items (Fresh juices)
+   7. icecreams       → 8 items (Vanilla, Chocolate, Mango)
+   8. indianbreads    → 16 items (Naan, Roti, Paratha, Kulcha)
+   9. mealcombo       → 7 items (Combo offers)
+  10. riceitem        → 15 items (Biryani, Pulao, Fried Rice)
+  11. soup            → 5 items (Tomato, Corn, Veg Soup)
+  12. southindian     → 17 items (Idli, Uttapam, Vada)
+  13. starters        → 16 items (Samosa, Pakora, Spring Roll)
+  14. sweets          → 5 items (Gulab Jamun, Rasgulla, Halwa)
+
+                            ↓
+                  [Composite Key Used]
+              (Category + SL = Unique Item ID)
+                            ↓
+┌──────────────────────────────────────┐
+│         ORDERS TABLE                 │
+├──────────────────────────────────────┤
+│ PK  OrderID     INT AUTO_INCREMENT   │ ← Unique order ID
+│     ItemName    VARCHAR(255)         │ ← Item name (FK reference)
+│     Price       DECIMAL(10,2)        │ ← Unit price
+│     Quantity    INT                  │ ← Items ordered
+│     TotalPrice  DECIMAL(10,2)        │ ← Quantity × Price
+│     OrderTime   DATETIME DEFAULT NOW │ ← Order timestamp
+└──────────────────────────────────────┘
+
+RELATIONSHIPS:
+- Menu Tables: One item per SL (Primary Key)
+- Orders Table: References menu items by ItemName
+- Composite Unique ID: (Category + SL) identifies unique menu item
+- One-to-Many: One menu item can be ordered multiple times
+
+DATA FLOW:
+Customer → Selects Items → Cart (Category + SL) → Checkout → ORDER INSERTED
+
+CONSTRAINTS:
+✓ All menu tables: PRIMARY KEY (SL)
+✓ Orders table: PRIMARY KEY (OrderID), AUTO_INCREMENT
+✓ All prices: DECIMAL(10,2) for accurate calculations
+✓ OrderTime: DATETIME with DEFAULT CURRENT_TIMESTAMP
+✓ Tax Calculation: Stored separately (not in DB, calculated in app)
+
+STATISTICS:
+- Total Items: 192 menu items
+- Total Categories: 14
+- Total Orders: Unlimited (auto-increments)
+- Database Size: ~50KB (depends on order history)
+```
 
 ---
 
 ## ✨ Features
 
 ### 🛍️ Customer Features
-- **Browse Menu**: 14 categories with 192+ menu items
-- **Shopping Cart**: Add, update, and remove items with real-time totals
+- **Browse Menu**: 14 categories with 192 menu items
+- **Interactive Shopping Cart**: 
+  - Add/remove items seamlessly
+  - Real-time quantity adjustments with +/- buttons
+  - Cart persists across category switches
+  - Handles duplicate SL numbers from different categories
+  - Beautiful animated sidebar display with totals
 - **Tax Calculation**: Automatic CGST (2.5%) + SGST (2.5%) calculation
-- **Order Placement**: Seamless checkout and order confirmation
-- **Responsive Design**: Works perfectly on desktop, tablet, and mobile
-- **Real-time Updates**: Instant cart and price calculations
+- **One-Click Checkout**: Seamless order placement with confirmation messages
+- **Category Navigation**: Smooth transitions between 14 menu categories
+- **Responsive Design**: Optimized for desktop, tablet, and mobile
+- **Beautiful Animations**: 
+  - Framer Motion smooth transitions
+  - OrderXpress orange-red gradient branding
+  - Animated silk background effects
+  - Glass-morphism card designs
+  - Real-time price updates with NumberFlow
 
 ### 👨‍💼 Admin Features
-- **Secure Login**: Password-protected admin dashboard
-- **Order Management**: View all customer orders with details
-- **Statistics Dashboard**: Track total orders and revenue
-- **Order History**: Timestamped order records
-- **Search & Filter**: Easily find specific orders
-- **Export Ready**: Order data ready for analysis
+- **Order Dashboard**: View all orders with detailed information
+- **Statistics**: Real-time total orders and revenue tracking
+- **Order Details**: Item-wise breakdown per order with timestamps
+- **Responsive Interface**: Works on all devices
 
 ### 🔧 System Features
-- **RESTful API**: 7 well-designed endpoints
-- **MySQL Connection Pooling**: Optimized database performance
+- **RESTful API**: 7 well-designed endpoints for all operations
+- **MySQL Database**: Optimized schema with 15 tables
 - **CORS Enabled**: Seamless frontend-backend communication
-- **Error Handling**: Comprehensive error responses
-- **Environment Management**: Secure credential handling
-- **Type Safety**: TypeScript throughout the frontend
-- **Modern UI**: Tailwind CSS with custom components
+- **Error Handling**: Comprehensive error responses and validation
+- **Environment Management**: Secure .env credential handling
+- **Type Safety**: Full TypeScript implementation
+- **Git Version Control**: Semantic commit messages
 
 ---
 
@@ -45,69 +128,116 @@ A modern, full-stack restaurant management system built with **Next.js**, **Expr
 ### Frontend
 | Technology | Version | Purpose |
 |-----------|---------|---------|
-| Next.js | 14.0.3 | React framework with SSR |
-| React | 18.3.1 | UI library |
-| TypeScript | Latest | Type safety |
+| Next.js | 14.0.3 | React framework with App Router |
+| React | 18.3.1 | UI library & state management |
+| TypeScript | Latest | Type safety & IDE support |
 | Tailwind CSS | 3.3.0 | Utility-first styling |
-| Axios | 1.6.2 | HTTP client |
+| Framer Motion | 9.x | Smooth animations & transitions |
+| Lucide React | Latest | Beautiful SVG icons |
+| @number-flow/react | Latest | Animated number transitions |
+| Axios | 1.6.2 | HTTP client for API calls |
 
 ### Backend
 | Technology | Version | Purpose |
 |-----------|---------|---------|
-| Node.js | 24.9.0 | Runtime |
-| Express.js | 4.18.2 | Web framework |
-| MySQL2 | 3.6.5 | Database driver |
-| CORS | 2.8.5 | Cross-origin support |
-| Dotenv | 16.3.1 | Environment variables |
+| Node.js | v24.9.0 | JavaScript runtime |
+| Express.js | 4.18.2 | Web server framework |
+| MySQL2 | 3.15.3 | Database driver (sync callback-based) |
+| CORS | 2.8.5 | Cross-origin request handling |
+| Dotenv | 16.3.1 | Environment variable management |
 
 ### Database
 | Component | Details |
 |-----------|---------|
-| System | MySQL 8.0+ |
+| System | MySQL 9.5.0 |
 | Database | `menu` |
-| Tables | 15 (14 menu + 1 orders) |
-| Items | 192 total menu items |
+| Tables | 15 (14 menu categories + 1 orders) |
+| Menu Items | 192 total items across all categories |
+| Connection | Connection pooling with optimized queries |
 
 ---
 
 ## 📁 Project Structure
 
 ```
-Restaurant-Management-System/
-│
+DBMS-Project/
 ├── 📁 backend/
-│   ├── server.js                 # Express API server (167 lines)
-│   ├── package.json              # Node dependencies (114 packages)
-│   ├── .env                      # Database credentials
-│   ├── menu_database.sql         # Database schema & data
+│   ├── server.js                 # 🚀 Express API server (port 5001)
+│   ├── package.json              # Node.js dependencies
+│   ├── .env.local                # Database credentials & config
+│   ├── menu_database.sql         # 📊 MySQL schema (15 tables)
 │   └── node_modules/             # Installed packages
 │
 ├── 📁 frontend/
 │   ├── 📁 app/
-│   │   ├── page.tsx              # Home page (Statistics)
+│   │   ├── page.tsx              # 🎯 Landing page with Silk background
 │   │   ├── menu/
-│   │   │   └── page.tsx          # Menu & ordering page
-│   │   ├── admin/
-│   │   │   └── page.tsx          # Admin dashboard
-│   │   ├── layout.tsx            # Root layout
-│   │   └── globals.css           # Global styles
-│   ├── package.json              # React dependencies (397 packages)
-│   ├── tailwind.config.js        # Tailwind configuration
-│   ├── postcss.config.js         # PostCSS plugins
+│   │   │   └── page.tsx          # 🛒 Menu + cart state (v2.2.0)
+│   │   ├── 📁 components/
+│   │   │   ├── Silk.tsx          # ✨ CSS-animated silk background
+│   │   │   ├── InteractiveMenu.tsx # 🍽️ Menu grid + cart sidebar
+│   │   │   └── 📁 ui/
+│   │   │       └── button.tsx    # 🔘 Reusable button component
+│   │   ├── layout.tsx            # Root layout (Tailwind)
+│   │   └── globals.css           # Global styles + animations
+│   ├── 📁 lib/
+│   │   ├── utils.ts              # 🔧 cn() utility function
+│   │   └── types.ts              # 📋 MenuItem, CartItem types
+│   ├── package.json              # React dependencies (Next.js 14, Tailwind, Framer Motion)
+│   ├── tsconfig.json             # TypeScript config (@/* aliases)
+│   ├── tailwind.config.ts        # Tailwind CSS config
 │   ├── next.config.js            # Next.js configuration
 │   ├── .env.local                # API configuration
 │   └── node_modules/             # Installed packages
 │
 ├── .gitignore                     # Git ignore rules
-├── README.md                      # Project documentation
+├── README.md                      # 📖 Project documentation (v2.2.0)
 ├── SETUP_SUMMARY.md              # Quick reference guide
 ├── setup.sh                       # Auto-installation script
-└── package.json                   # Root dependencies
+└── package.json                   # Root package.json
+
+### Today's Updates (v2.2.0)
+
+| File | Changes |
+|------|---------|
+| `app/menu/page.tsx` | ✅ Lifted cart state + async placeOrder() API integration |
+| `InteractiveMenu.tsx` | ✅ Fixed duplicate SL with category awareness |
+| `Silk.tsx` | ✅ CSS-based animations (replaced Three.js - 60fps smooth) |
+| `lib/types.ts` | ✅ Added `category?: string` to MenuItem interface |
+| `README.md` | ✅ Features, Tech Stack, ER Diagram sections updated |
 ```
 
 ---
 
-## 🚀 Getting Started
+## 📝 Recent Updates (v2.2.0 - November 26, 2025)
+
+### 🐛 Bug Fixes
+- **Fixed Checkout Button**: Added async `placeOrder()` function with proper error handling and order confirmation
+- **Fixed Cart Persistence**: Lifted cart state from child component to parent to prevent reset on category switches
+- **Fixed Duplicate SL Handling**: Implemented composite key (Category + SL) to properly distinguish items with same SL from different categories
+
+### ✨ New Features & Improvements
+- **Beautiful Silk Background**: Implemented CSS-based animated silk effect (60fps smooth, no external dependencies)
+- **Enhanced Cart Display**: Real-time price updates, category-aware item identification, smooth animations
+- **Improved Tax Calculations**: Automatic CGST (2.5%) + SGST (2.5%) with NumberFlow animations
+
+### 📊 Git Commits Today
+```
+40de3d4 - ✨ Upgrade: Implement beautiful fluid silk background with advanced CSS animations
+6e6b5f1 - 🔧 Fix: Replace Three.js Silk with CSS-based animated background
+a565447 - 🐛 Fix: Three.js Silk background component initialization error
+07c7eb1 - ✨ Feat: Replace landing page background with Three.js Silk component
+0ea9428 - 🐛 Fix: Handle duplicate SL numbers from different categories in cart
+e7da5ad - 🐛 Fix: Checkout functionality and cart persistence across categories
+```
+
+### 📈 Test Results
+✅ All cart operations verified with category-aware identification
+✅ Checkout flow: Add items → Category switch → Items persist → Checkout succeeds
+✅ Animations: Smooth 60fps silk background rendering
+✅ API Integration: POST /orders endpoint receives properly formatted order data
+
+---
 
 ### Prerequisites
 
