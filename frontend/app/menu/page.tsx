@@ -3,13 +3,15 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { InteractiveMenu, type MenuItem } from '../components/InteractiveMenu';
+import { InteractiveMenu, type MenuItem, type CartItem } from '../components/InteractiveMenu';
 
 export default function MenuPage() {
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('beverages');
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const [cart, setCart] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -50,6 +52,52 @@ export default function MenuPage() {
 
     fetchMenuItems();
   }, [selectedCategory]);
+
+  const placeOrder = async () => {
+    if (cart.length === 0) {
+      alert('🛒 Your cart is empty! Add items before checkout.');
+      return;
+    }
+
+    setCheckoutLoading(true);
+    try {
+      const orderItems = cart.map((item) => ({
+        itemName: item.ItemName,
+        price: item.Price,
+        quantity: item.quantity,
+        totalPrice: item.Price * item.quantity,
+      }));
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/orders`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            items: orderItems,
+            totalAmount:
+              cart.reduce((sum, item) => sum + item.Price * item.quantity, 0) * 1.05,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert('✅ Order placed successfully! Your food is being prepared.');
+        setCart([]);
+      } else {
+        alert(`❌ Failed to place order: ${data.message || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Error placing order:', error);
+      alert('❌ Error placing order. Please try again.');
+    } finally {
+      setCheckoutLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -110,7 +158,13 @@ export default function MenuPage() {
             <p className="text-gray-600 dark:text-gray-400">Loading menu items...</p>
           </motion.div>
         ) : (
-          <InteractiveMenu items={menuItems} />
+          <InteractiveMenu
+            items={menuItems}
+            cart={cart}
+            setCart={setCart}
+            onCheckout={placeOrder}
+            checkoutLoading={checkoutLoading}
+          />
         )}
       </main>
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Minus, Plus, ShoppingCart, X, CreditCard } from 'lucide-react';
 import { Button } from './ui/button';
@@ -19,10 +19,19 @@ interface CartItem extends MenuItem {
 
 interface InteractiveMenuProps {
   items?: MenuItem[];
+  cart: CartItem[];
+  setCart: Dispatch<SetStateAction<CartItem[]>>;
+  onCheckout: () => Promise<void>;
+  checkoutLoading?: boolean;
 }
 
-export function InteractiveMenu({ items = [] }: InteractiveMenuProps) {
-  const [cart, setCart] = useState<CartItem[]>([]);
+export function InteractiveMenu({
+  items = [],
+  cart,
+  setCart,
+  onCheckout,
+  checkoutLoading = false,
+}: InteractiveMenuProps) {
   const [loading, setLoading] = useState(!items.length);
 
   useEffect(() => {
@@ -284,9 +293,15 @@ export function InteractiveMenu({ items = [] }: InteractiveMenuProps) {
               </motion.span>
             </div>
 
-            <Button size="sm" variant="default" className="w-full gap-2 mt-3">
+            <Button
+              size="sm"
+              variant="default"
+              onClick={onCheckout}
+              disabled={cart.length === 0 || checkoutLoading}
+              className="w-full gap-2 mt-3"
+            >
               <CreditCard className="w-4 h-4" />
-              Checkout
+              {checkoutLoading ? 'Processing...' : 'Checkout'}
             </Button>
           </motion.div>
         </motion.div>
