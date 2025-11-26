@@ -41,7 +41,12 @@ export default function MenuPage() {
         );
         const data = await response.json();
         if (data.success) {
-          setMenuItems(data.data);
+          // Add category to each item
+          const itemsWithCategory = data.data.map((item: any) => ({
+            ...item,
+            category: selectedCategory,
+          }));
+          setMenuItems(itemsWithCategory);
         }
       } catch (error) {
         console.error('Error fetching menu items:', error);

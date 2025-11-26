@@ -11,6 +11,7 @@ interface MenuItem {
   SL: number;
   ItemName: string;
   Price: number;
+  category?: string;
 }
 
 interface CartItem extends MenuItem {
@@ -63,10 +64,12 @@ export function InteractiveMenu({
 
   const addToCart = (item: MenuItem) => {
     setCart((currentCart) => {
-      const existingItem = currentCart.find((cartItem) => cartItem.SL === item.SL);
+      const existingItem = currentCart.find(
+        (cartItem) => cartItem.SL === item.SL && cartItem.category === item.category
+      );
       if (existingItem) {
         return currentCart.map((cartItem) =>
-          cartItem.SL === item.SL
+          cartItem.SL === item.SL && cartItem.category === item.category
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem
         );
@@ -75,15 +78,17 @@ export function InteractiveMenu({
     });
   };
 
-  const removeFromCart = (itemId: number) => {
-    setCart((currentCart) => currentCart.filter((item) => item.SL !== itemId));
+  const removeFromCart = (itemId: number, itemCategory: string) => {
+    setCart((currentCart) =>
+      currentCart.filter((item) => !(item.SL === itemId && item.category === itemCategory))
+    );
   };
 
-  const updateQuantity = (itemId: number, delta: number) => {
+  const updateQuantity = (itemId: number, delta: number, itemCategory: string) => {
     setCart((currentCart) =>
       currentCart
         .map((item) => {
-          if (item.SL === itemId) {
+          if (item.SL === itemId && item.category === itemCategory) {
             const newQuantity = item.quantity + delta;
             return newQuantity > 0 ? { ...item, quantity: newQuantity } : item;
           }
@@ -216,7 +221,7 @@ export function InteractiveMenu({
                         <motion.button
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.95 }}
-                          onClick={() => removeFromCart(item.SL)}
+                          onClick={() => removeFromCart(item.SL, item.category || '')}
                           className="p-1 rounded hover:bg-gray-200 dark:hover:bg-zinc-700"
                         >
                           <X className="w-3 h-3 text-gray-400" />
@@ -229,7 +234,7 @@ export function InteractiveMenu({
                           <motion.button
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.95 }}
-                            onClick={() => updateQuantity(item.SL, -1)}
+                            onClick={() => updateQuantity(item.SL, -1, item.category || '')}
                             className="p-0.5 rounded hover:bg-gray-200 dark:hover:bg-zinc-700"
                           >
                             <Minus className="w-3 h-3" />
@@ -240,7 +245,7 @@ export function InteractiveMenu({
                           <motion.button
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.95 }}
-                            onClick={() => updateQuantity(item.SL, 1)}
+                            onClick={() => updateQuantity(item.SL, 1, item.category || '')}
                             className="p-0.5 rounded hover:bg-gray-200 dark:hover:bg-zinc-700"
                           >
                             <Plus className="w-3 h-3" />
