@@ -11,27 +11,24 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+console.log('📊 DB Configuration:');
+console.log('  Host:', process.env.DB_HOST || 'localhost');
+console.log('  User:', process.env.DB_USER || 'root');
+console.log('  Database:', process.env.DB_NAME || 'menu');
+
 // MySQL Connection Pool
-const dbConfig = {
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || 'Welcomenav1#',
-  database: process.env.DB_NAME || 'menu',
+const pool = mysql.createPool({
+  host: 'localhost',
+  user: 'root',
+  password: 'Welcomenav1#',
+  database: 'menu',
+  port: 3306,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-};
-
-console.log('📊 DB Config:', {
-  host: dbConfig.host,
-  user: dbConfig.user,
-  database: dbConfig.database,
-  password: dbConfig.password ? '***' : 'not set'
+  enableKeepAlive: true
 });
 
-const pool = mysql.createPool(dbConfig);
-
-// Test database connection
 pool.getConnection((err, connection) => {
   if (err) {
     console.error('✗ Failed to connect to MySQL:', err.message);
