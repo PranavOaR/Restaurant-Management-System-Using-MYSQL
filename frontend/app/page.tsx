@@ -7,7 +7,7 @@ import { ShoppingCart, Settings, Pizza, Zap, DollarSign } from 'lucide-react';
 import CardNav from './components/CardNav';
 import BlurText from './components/BlurText';
 import Silk from './components/Silk';
-import { GradientButton } from './components/ui/gradient-button';
+import { Button as MovingBorderButton } from './components/ui/moving-border';
 
 export default function Home() {
   const [stats, setStats] = useState({ totalOrders: 0, totalRevenue: 0 });
@@ -112,44 +112,44 @@ export default function Home() {
           </motion.div>
 
             {/* Main CTA Buttons */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+            <div className="flex flex-col md:flex-row gap-6 justify-center items-center mb-20">
               <motion.div
-                whileHover={{ scale: 1.05, y: -10 }}
-                whileTap={{ scale: 0.98 }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <Link href="/menu" className="block">
-                  <GradientButton asChild className="w-full h-auto flex flex-col items-center justify-center px-12 py-12 rounded-3xl">
-                    <div className="w-full flex flex-col items-center justify-center">
-                      <div className="bg-white bg-opacity-20 rounded-full p-6 backdrop-blur-md mb-6">
-                        <ShoppingCart size={64} className="text-white" />
-                      </div>
-                      <h3 className="text-3xl md:text-4xl font-playfair font-bold mb-3 text-white">Order Food</h3>
-                      <p className="text-base md:text-lg text-white leading-relaxed font-poppins">Browse our delicious menu and place your order in seconds. Fast checkout, fresher meals.</p>
-                    </div>
-                  </GradientButton>
+                <Link href="/menu">
+                  <MovingBorderButton
+                    borderRadius="1.75rem"
+                    duration={3000}
+                    className="bg-gradient-to-r from-orange-500 to-pink-500 text-white hover:from-orange-600 hover:to-pink-600 transition-all flex items-center gap-2"
+                    borderClassName="bg-[radial-gradient(var(--orange-500)_40%,transparent_60%)]"
+                  >
+                    <ShoppingCart size={18} />
+                    Order Food
+                  </MovingBorderButton>
                 </Link>
               </motion.div>
 
               <motion.div
-                whileHover={{ scale: 1.05, y: -10 }}
-                whileTap={{ scale: 0.98 }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
               >
-                <Link href="/admin" className="block">
-                  <GradientButton variant="variant" asChild className="w-full h-auto flex flex-col items-center justify-center px-12 py-12 rounded-3xl">
-                    <div className="w-full flex flex-col items-center justify-center">
-                      <div className="bg-white bg-opacity-20 rounded-full p-6 backdrop-blur-md mb-6">
-                        <Settings size={64} className="text-white" />
-                      </div>
-                      <h3 className="text-3xl md:text-4xl font-playfair font-bold mb-3 text-white">Admin Panel</h3>
-                      <p className="text-base md:text-lg text-white leading-relaxed font-poppins">Manage menu items, view orders, and track real-time statistics. Full control in one place.</p>
-                    </div>
-                  </GradientButton>
+                <Link href="/admin">
+                  <MovingBorderButton
+                    borderRadius="1.75rem"
+                    duration={3000}
+                    className="bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600 transition-all flex items-center gap-2"
+                    borderClassName="bg-[radial-gradient(var(--blue-500)_40%,transparent_60%)]"
+                  >
+                    <Settings size={18} />
+                    Admin Panel
+                  </MovingBorderButton>
                 </Link>
               </motion.div>
             </div>
