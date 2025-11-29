@@ -7,6 +7,7 @@ import { ShoppingCart, Settings, Pizza, Zap, DollarSign } from 'lucide-react';
 import CardNav from './components/CardNav';
 import BlurText from './components/BlurText';
 import Silk from './components/Silk';
+import { GradientButton } from './components/ui/gradient-button';
 
 export default function Home() {
   const [stats, setStats] = useState({ totalOrders: 0, totalRevenue: 0 });
@@ -120,15 +121,15 @@ export default function Home() {
                 transition={{ duration: 0.5 }}
               >
                 <Link href="/menu" className="block">
-                  <div className="bg-gradient-to-br from-green-400 via-green-500 to-green-600 rounded-3xl p-12 text-white hover:shadow-2xl transition-all duration-300 hover:shadow-green-500/50 backdrop-blur-sm bg-opacity-90 border border-green-300 border-opacity-30">
-                    <div className="flex items-center justify-center mb-6">
-                      <div className="bg-white bg-opacity-20 rounded-full p-6 backdrop-blur-md">
+                  <GradientButton asChild className="w-full h-auto flex flex-col items-center justify-center px-12 py-12 rounded-3xl">
+                    <div className="w-full flex flex-col items-center justify-center">
+                      <div className="bg-white bg-opacity-20 rounded-full p-6 backdrop-blur-md mb-6">
                         <ShoppingCart size={64} className="text-white" />
                       </div>
+                      <h3 className="text-3xl font-bold mb-3 text-white">Order Food</h3>
+                      <p className="text-lg text-white leading-relaxed">Browse our delicious menu and place your order in seconds. Fast checkout, fresher meals.</p>
                     </div>
-                    <h3 className="text-3xl font-bold mb-3">Order Food</h3>
-                    <p className="text-lg text-green-50 leading-relaxed">Browse our delicious menu and place your order in seconds. Fast checkout, fresher meals.</p>
-                  </div>
+                  </GradientButton>
                 </Link>
               </motion.div>
 
@@ -140,15 +141,15 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: 0.1 }}
               >
                 <Link href="/admin" className="block">
-                  <div className="bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 rounded-3xl p-12 text-white hover:shadow-2xl transition-all duration-300 hover:shadow-blue-500/50 backdrop-blur-sm bg-opacity-90 border border-blue-300 border-opacity-30">
-                    <div className="flex items-center justify-center mb-6">
-                      <div className="bg-white bg-opacity-20 rounded-full p-6 backdrop-blur-md">
+                  <GradientButton variant="variant" asChild className="w-full h-auto flex flex-col items-center justify-center px-12 py-12 rounded-3xl">
+                    <div className="w-full flex flex-col items-center justify-center">
+                      <div className="bg-white bg-opacity-20 rounded-full p-6 backdrop-blur-md mb-6">
                         <Settings size={64} className="text-white" />
                       </div>
+                      <h3 className="text-3xl font-bold mb-3 text-white">Admin Panel</h3>
+                      <p className="text-lg text-white leading-relaxed">Manage menu items, view orders, and track real-time statistics. Full control in one place.</p>
                     </div>
-                    <h3 className="text-3xl font-bold mb-3">Admin Panel</h3>
-                    <p className="text-lg text-blue-50 leading-relaxed">Manage menu items, view orders, and track real-time statistics. Full control in one place.</p>
-                  </div>
+                  </GradientButton>
                 </Link>
               </motion.div>
             </div>
