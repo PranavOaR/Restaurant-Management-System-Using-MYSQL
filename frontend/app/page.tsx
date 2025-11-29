@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ShoppingCart, Settings, Pizza, Zap, DollarSign } from 'lucide-react';
 import CardNav from './components/CardNav';
+import BlurText from './components/BlurText';
 import Silk from './components/Silk';
 
 export default function Home() {
@@ -94,7 +95,13 @@ export default function Home() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl md:text-6xl font-bold text-white mb-6">Welcome to OrderXpress</h2>
+            <BlurText
+              text="Welcome to OrderXpress"
+              delay={80}
+              animateBy="words"
+              direction="top"
+              className="text-5xl md:text-6xl font-bold text-white mb-6"
+            />
             <p className="text-xl md:text-2xl text-gray-300 mb-2">
               Fast, Fresh, Delicious!
             </p>
