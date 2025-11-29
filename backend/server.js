@@ -151,6 +151,117 @@ app.get('/api/statistics', (req, res) => {
   });
 });
 
+// Add new menu item to category
+app.post('/api/menu/add', (req, res) => {
+  const { category, itemName, price } = req.body;
+  
+  if (!category || !itemName || !price) {
+    return res.status(400).json({ success: false, error: 'Missing required fields' });
+  }
+  
+  // Validate category exists
+  const validCategories = [
+    'beverages', 'chatitem', 'chineseitems', 'curry', 'dosaitem',
+    'fruitjuice', 'icecreams', 'indianbreads', 'mealcombo',
+    'riceitem', 'soup', 'southindian', 'starters', 'sweets'
+  ];
+  
+  if (!validCategories.includes(category)) {
+    return res.status(400).json({ success: false, error: 'Invalid category' });
+  }
+  
+  pool.query(
+    `INSERT INTO ${category} (ItemName, Price) VALUES (?, ?)`,
+    [itemName, price],
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({ success: false, error: err.message });
+      }
+      res.json({ 
+        success: true, 
+        message: 'Item added successfully',
+        data: { SL: result.insertId, ItemName: itemName, Price: price }
+      });
+    }
+  );
+});
+
+// Update menu item
+app.put('/api/menu/update', (req, res) => {
+  const { category, itemId, itemName, price } = req.body;
+  
+  if (!category || !itemId || !itemName || !price) {
+    return res.status(400).json({ success: false, error: 'Missing required fields' });
+  }
+  
+  // Validate category exists
+  const validCategories = [
+    'beverages', 'chatitem', 'chineseitems', 'curry', 'dosaitem',
+    'fruitjuice', 'icecreams', 'indianbreads', 'mealcombo',
+    'riceitem', 'soup', 'southindian', 'starters', 'sweets'
+  ];
+  
+  if (!validCategories.includes(category)) {
+    return res.status(400).json({ success: false, error: 'Invalid category' });
+  }
+  
+  pool.query(
+    `UPDATE ${category} SET ItemName = ?, Price = ? WHERE SL = ?`,
+    [itemName, price, itemId],
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({ success: false, error: err.message });
+      }
+      
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ success: false, error: 'Item not found' });
+      }
+      
+      res.json({ 
+        success: true, 
+        message: 'Item updated successfully',
+        data: { SL: itemId, ItemName: itemName, Price: price }
+      });
+    }
+  );
+});
+
+// Delete menu item
+app.delete('/api/menu/delete', (req, res) => {
+  const { category, itemId } = req.body;
+  
+  if (!category || !itemId) {
+    return res.status(400).json({ success: false, error: 'Missing required fields' });
+  }
+  
+  // Validate category exists
+  const validCategories = [
+    'beverages', 'chatitem', 'chineseitems', 'curry', 'dosaitem',
+    'fruitjuice', 'icecreams', 'indianbreads', 'mealcombo',
+    'riceitem', 'soup', 'southindian', 'starters', 'sweets'
+  ];
+  
+  if (!validCategories.includes(category)) {
+    return res.status(400).json({ success: false, error: 'Invalid category' });
+  }
+  
+  pool.query(
+    `DELETE FROM ${category} WHERE SL = ?`,
+    [itemId],
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({ success: false, error: err.message });
+      }
+      
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ success: false, error: 'Item not found' });
+      }
+      
+      res.json({ success: true, message: 'Item deleted successfully' });
+    }
+  );
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'Backend is running' });
