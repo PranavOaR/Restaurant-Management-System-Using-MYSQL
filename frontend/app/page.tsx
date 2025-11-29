@@ -62,16 +62,16 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-900 relative overflow-hidden">
-      {/* Silk Background Animation */}
-      <div className="absolute inset-0 z-0">
-        <Silk
-          speed={5}
-          scale={1}
-          color="#7B7481"
-          noiseIntensity={1.5}
-          rotation={0}
-        />
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Modern Mesh Background */}
+      <div className="fixed inset-0 z-0">
+        {/* Animated gradient blobs */}
+        <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-orange-400 via-pink-300 to-transparent rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-400 via-purple-300 to-transparent rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-gradient-to-br from-green-400 via-cyan-300 to-transparent rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
+        
+        {/* Base gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50"></div>
       </div>
 
       {/* Content Overlay */}
@@ -79,8 +79,8 @@ export default function Home() {
         {/* Card Nav */}
         <CardNav
           items={navItems}
-          baseColor="#1F2937"
-          menuColor="#fff"
+          baseColor="#FFFFFF"
+          menuColor="#1F2937"
           buttonBgColor="#FF6B35"
           buttonTextColor="#fff"
           ease="power3.out"
@@ -101,12 +101,12 @@ export default function Home() {
               delay={80}
               animateBy="words"
               direction="top"
-              className="text-5xl md:text-6xl font-bold text-white mb-6"
+              className="text-6xl md:text-7xl font-playfair font-bold bg-gradient-to-r from-orange-600 via-pink-600 to-purple-600 bg-clip-text text-transparent mb-6 drop-shadow-lg"
             />
-            <p className="text-xl md:text-2xl text-gray-300 mb-2">
+            <p className="text-2xl md:text-3xl font-montserrat font-semibold text-orange-600 mb-2">
               Fast, Fresh, Delicious!
             </p>
-            <p className="text-lg text-gray-400">
+            <p className="text-lg text-gray-600 font-poppins">
               Order your favorite dishes now and enjoy premium quality food
             </p>
           </motion.div>
@@ -126,8 +126,8 @@ export default function Home() {
                       <div className="bg-white bg-opacity-20 rounded-full p-6 backdrop-blur-md mb-6">
                         <ShoppingCart size={64} className="text-white" />
                       </div>
-                      <h3 className="text-3xl font-bold mb-3 text-white">Order Food</h3>
-                      <p className="text-lg text-white leading-relaxed">Browse our delicious menu and place your order in seconds. Fast checkout, fresher meals.</p>
+                      <h3 className="text-3xl md:text-4xl font-playfair font-bold mb-3 text-white">Order Food</h3>
+                      <p className="text-base md:text-lg text-white leading-relaxed font-poppins">Browse our delicious menu and place your order in seconds. Fast checkout, fresher meals.</p>
                     </div>
                   </GradientButton>
                 </Link>
@@ -146,8 +146,8 @@ export default function Home() {
                       <div className="bg-white bg-opacity-20 rounded-full p-6 backdrop-blur-md mb-6">
                         <Settings size={64} className="text-white" />
                       </div>
-                      <h3 className="text-3xl font-bold mb-3 text-white">Admin Panel</h3>
-                      <p className="text-lg text-white leading-relaxed">Manage menu items, view orders, and track real-time statistics. Full control in one place.</p>
+                      <h3 className="text-3xl md:text-4xl font-playfair font-bold mb-3 text-white">Admin Panel</h3>
+                      <p className="text-base md:text-lg text-white leading-relaxed font-poppins">Manage menu items, view orders, and track real-time statistics. Full control in one place.</p>
                     </div>
                   </GradientButton>
                 </Link>
@@ -163,26 +163,26 @@ export default function Home() {
                 className="mb-20"
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 border border-gray-700 backdrop-blur-sm">
+                <div className="bg-white bg-opacity-80 backdrop-blur-md rounded-2xl p-8 border border-white border-opacity-30 shadow-lg hover:shadow-xl transition-all duration-300">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-gray-400 text-sm font-semibold mb-2">Total Orders</p>
-                        <div className="text-4xl font-bold text-green-400">{stats.totalOrders}</div>
+                        <p className="text-gray-600 text-sm font-semibold font-poppins mb-2">Total Orders</p>
+                        <div className="text-4xl font-bold font-playfair text-orange-600">{stats.totalOrders}</div>
                       </div>
-                      <div className="bg-green-500 bg-opacity-20 rounded-full p-4 backdrop-blur-md">
-                        <ShoppingCart size={32} className="text-green-400" />
+                      <div className="bg-orange-100 rounded-full p-4 backdrop-blur-md">
+                        <ShoppingCart size={32} className="text-orange-600" />
                       </div>
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 border border-gray-700 backdrop-blur-sm">
+                  <div className="bg-white bg-opacity-80 backdrop-blur-md rounded-2xl p-8 border border-white border-opacity-30 shadow-lg hover:shadow-xl transition-all duration-300">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-gray-400 text-sm font-semibold mb-2">Total Revenue</p>
-                        <div className="text-4xl font-bold text-blue-400">Rs. {stats.totalRevenue}</div>
+                        <p className="text-gray-600 text-sm font-semibold font-poppins mb-2">Total Revenue</p>
+                        <div className="text-4xl font-bold font-playfair text-blue-600">Rs. {stats.totalRevenue}</div>
                       </div>
-                      <div className="bg-blue-500 bg-opacity-20 rounded-full p-4 backdrop-blur-md">
-                        <DollarSign size={32} className="text-blue-400" />
+                      <div className="bg-blue-100 rounded-full p-4 backdrop-blur-md">
+                        <DollarSign size={32} className="text-blue-600" />
                       </div>
                     </div>
                   </div>
@@ -192,7 +192,7 @@ export default function Home() {
 
           {/* Features Grid */}
           <div className="mb-16" id="features">
-            <h3 className="text-3xl font-bold text-white text-center mb-12">Why Choose OrderXpress?</h3>
+            <h3 className="text-4xl md:text-5xl font-playfair font-bold text-gray-800 text-center mb-12">Why Choose OrderXpress?</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 { icon: Pizza, title: 'Premium Quality', desc: 'Handpicked ingredients sourced fresh daily for the best taste and nutrition' },
@@ -207,13 +207,13 @@ export default function Home() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 * idx }}
                     whileHover={{ y: -8 }}
-                    className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 border border-gray-700 hover:border-gray-600 transition-all duration-300 backdrop-blur-sm hover:shadow-xl"
+                    className="bg-white bg-opacity-80 backdrop-blur-md rounded-2xl p-8 border border-white border-opacity-30 hover:border-opacity-50 transition-all duration-300 shadow-lg hover:shadow-xl"
                   >
-                    <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-full w-16 h-16 flex items-center justify-center mb-6 shadow-lg">
+                    <div className="bg-gradient-to-br from-orange-500 to-pink-500 rounded-full w-16 h-16 flex items-center justify-center mb-6 shadow-lg">
                       <IconComponent size={32} className="text-white" />
                     </div>
-                    <h4 className="text-xl font-bold text-white mb-3">{feature.title}</h4>
-                    <p className="text-gray-400 leading-relaxed">{feature.desc}</p>
+                    <h4 className="text-2xl font-playfair font-bold text-gray-800 mb-3">{feature.title}</h4>
+                    <p className="text-gray-600 leading-relaxed font-poppins">{feature.desc}</p>
                   </motion.div>
                 );
               })}
@@ -225,10 +225,10 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
-            className="bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 rounded-3xl p-12 text-center backdrop-blur-sm border border-orange-300 border-opacity-30 shadow-2xl"
+            className="bg-gradient-to-r from-orange-500 via-pink-500 to-red-500 rounded-3xl p-12 text-center backdrop-blur-sm border border-orange-300 border-opacity-50 shadow-2xl"
           >
-            <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">Ready to Order?</h3>
-            <p className="text-lg text-orange-50 mb-8 max-w-2xl mx-auto">
+            <h3 className="text-4xl md:text-5xl font-playfair font-bold text-white mb-4">Ready to Order?</h3>
+            <p className="text-lg text-white mb-8 max-w-2xl mx-auto font-poppins">
               Start exploring our delicious menu and enjoy premium food delivery right to your doorstep.
             </p>
             <Link href="/menu">
@@ -245,9 +245,9 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-800 bg-opacity-95 text-white py-8 mt-16 relative z-20">
-        <div className="container text-center">
-          <p>&copy; 2025 Restaurant Management System. All rights reserved.</p>
+      <footer className="bg-gradient-to-r from-gray-800 to-gray-900 bg-opacity-95 text-white py-8 mt-16 relative z-20">
+        <div className="container text-center font-poppins">
+          <p>&copy; 2025 OrderXpress. All rights reserved.</p>
         </div>
       </footer>
       </div>

@@ -7,6 +7,12 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],
+        playfair: ['Playfair Display', 'serif'],
+        montserrat: ['Montserrat', 'sans-serif'],
+        grotesk: ['Space Grotesk', 'sans-serif'],
+      },
       colors: {
         primary: '#4CAF50',
         secondary: '#2196F3',
