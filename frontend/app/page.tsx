@@ -101,7 +101,7 @@ export default function Home() {
               delay={80}
               animateBy="words"
               direction="top"
-              className="text-6xl md:text-7xl font-playfair font-bold bg-gradient-to-r from-orange-600 via-pink-600 to-purple-600 bg-clip-text text-transparent mb-6 drop-shadow-lg"
+              className="text-6xl md:text-7xl font-playfair font-bold bg-gradient-to-r from-orange-600 via-pink-600 to-purple-600 bg-clip-text text-transparent mb-6"
             />
             <p className="text-2xl md:text-3xl font-montserrat font-semibold text-orange-600 mb-2">
               Fast, Fresh, Delicious!

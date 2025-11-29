@@ -88,7 +88,7 @@ const BlurText: React.FC<BlurTextProps> = ({
   const times = Array.from({ length: stepCount }, (_, i) => (stepCount === 1 ? 0 : i / (stepCount - 1)));
 
   return (
-    <p ref={ref} className={`blur-text ${className} flex flex-wrap justify-center`}>
+    <p ref={ref} className={`blur-text ${className} flex flex-wrap justify-center`} style={{ background: className.includes('bg-gradient') ? 'linear-gradient(to right, rgb(234, 88, 12), rgb(217, 70, 239), rgb(147, 51, 234))' : undefined, WebkitBackgroundClip: className.includes('bg-clip-text') ? 'text' : undefined, WebkitTextFillColor: className.includes('text-transparent') ? 'transparent' : undefined }}>
       {elements.map((segment, index) => {
         const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots);
 
