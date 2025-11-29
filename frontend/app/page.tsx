@@ -61,91 +61,154 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main className="container py-16">
-        <div className="max-w-4xl mx-auto">
+      <main className="container py-20">
+        <div className="max-w-6xl mx-auto">
           {/* Welcome Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="bg-white bg-opacity-95 rounded-lg shadow-2xl p-12 mb-8 text-center backdrop-blur-sm"
+            className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold text-gray-800 mb-4">Welcome to OrderXpress</h2>
-            <p className="text-lg text-gray-600 mb-8">
-              Fast, Fresh, Delicious! Order your favorite dishes now!
+            <h2 className="text-5xl md:text-6xl font-bold text-white mb-6">Welcome to OrderXpress</h2>
+            <p className="text-xl md:text-2xl text-gray-300 mb-2">
+              Fast, Fresh, Delicious!
             </p>
+            <p className="text-lg text-gray-400">
+              Order your favorite dishes now and enjoy premium quality food
+            </p>
+          </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            {/* Main CTA Buttons */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
               <motion.div
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.05, y: -10 }}
                 whileTap={{ scale: 0.98 }}
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
               >
                 <Link href="/menu" className="block">
-                  <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-full p-8 text-white hover:shadow-lg transition-shadow cursor-pointer flex flex-col items-center justify-center min-h-56">
-                    <ShoppingCart size={56} className="mb-4" />
-                    <h3 className="text-2xl font-bold mb-2">Order Food</h3>
-                    <p className="text-lg">Browse menu and place your order</p>
+                  <div className="bg-gradient-to-br from-green-400 via-green-500 to-green-600 rounded-3xl p-12 text-white hover:shadow-2xl transition-all duration-300 hover:shadow-green-500/50 backdrop-blur-sm bg-opacity-90 border border-green-300 border-opacity-30">
+                    <div className="flex items-center justify-center mb-6">
+                      <div className="bg-white bg-opacity-20 rounded-full p-6 backdrop-blur-md">
+                        <ShoppingCart size={64} className="text-white" />
+                      </div>
+                    </div>
+                    <h3 className="text-3xl font-bold mb-3">Order Food</h3>
+                    <p className="text-lg text-green-50 leading-relaxed">Browse our delicious menu and place your order in seconds. Fast checkout, fresher meals.</p>
                   </div>
                 </Link>
               </motion.div>
 
               <motion.div
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.05, y: -10 }}
                 whileTap={{ scale: 0.98 }}
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
               >
                 <Link href="/admin" className="block">
-                  <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-full p-8 text-white hover:shadow-lg transition-shadow cursor-pointer flex flex-col items-center justify-center min-h-56">
-                    <Settings size={56} className="mb-4" />
-                    <h3 className="text-2xl font-bold mb-2">Admin Panel</h3>
-                    <p className="text-lg">View orders and statistics</p>
+                  <div className="bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 rounded-3xl p-12 text-white hover:shadow-2xl transition-all duration-300 hover:shadow-blue-500/50 backdrop-blur-sm bg-opacity-90 border border-blue-300 border-opacity-30">
+                    <div className="flex items-center justify-center mb-6">
+                      <div className="bg-white bg-opacity-20 rounded-full p-6 backdrop-blur-md">
+                        <Settings size={64} className="text-white" />
+                      </div>
+                    </div>
+                    <h3 className="text-3xl font-bold mb-3">Admin Panel</h3>
+                    <p className="text-lg text-blue-50 leading-relaxed">Manage menu items, view orders, and track real-time statistics. Full control in one place.</p>
                   </div>
                 </Link>
               </motion.div>
             </div>
 
-            {/* Statistics */}
+            {/* Statistics Section */}
             {!loading && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
-                className="grid grid-cols-2 md:grid-cols-2 gap-4 mt-8"
+                className="mb-20"
               >
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <div className="text-3xl font-bold text-green-600">{stats.totalOrders}</div>
-                  <div className="text-gray-600">Total Orders</div>
-                </div>
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <div className="text-3xl font-bold text-blue-600">Rs. {stats.totalRevenue}</div>
-                  <div className="text-gray-600">Total Revenue</div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 border border-gray-700 backdrop-blur-sm">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-gray-400 text-sm font-semibold mb-2">Total Orders</p>
+                        <div className="text-4xl font-bold text-green-400">{stats.totalOrders}</div>
+                      </div>
+                      <div className="bg-green-500 bg-opacity-20 rounded-full p-4 backdrop-blur-md">
+                        <ShoppingCart size={32} className="text-green-400" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 border border-gray-700 backdrop-blur-sm">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-gray-400 text-sm font-semibold mb-2">Total Revenue</p>
+                        <div className="text-4xl font-bold text-blue-400">Rs. {stats.totalRevenue}</div>
+                      </div>
+                      <div className="bg-blue-500 bg-opacity-20 rounded-full p-4 backdrop-blur-md">
+                        <DollarSign size={32} className="text-blue-400" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             )}
-          </motion.div>
 
-          {/* Features */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { icon: Pizza, title: 'Fresh Food', desc: 'Made with fresh ingredients' },
-              { icon: Zap, title: 'Quick Service', desc: 'Fast preparation' },
-              { icon: DollarSign, title: 'Affordable', desc: 'Best prices in town' }
-            ].map((feature, idx) => {
-              const IconComponent = feature.icon;
-              return (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 * idx }}
-                  className="card bg-white bg-opacity-90 backdrop-blur-sm"
-                >
-                  <IconComponent size={48} className="text-orange-500 mb-2" />
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">{feature.title}</h3>
-                  <p className="text-gray-600">{feature.desc}</p>
-                </motion.div>
-              );
-            })}
+          {/* Features Grid */}
+          <div className="mb-16">
+            <h3 className="text-3xl font-bold text-white text-center mb-12">Why Choose OrderXpress?</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[
+                { icon: Pizza, title: 'Premium Quality', desc: 'Handpicked ingredients sourced fresh daily for the best taste and nutrition' },
+                { icon: Zap, title: 'Lightning Fast', desc: 'Get your order prepared and delivered in record time without compromising quality' },
+                { icon: DollarSign, title: 'Best Prices', desc: 'Competitive pricing with regular offers and loyalty rewards for our valued customers' }
+              ].map((feature, idx) => {
+                const IconComponent = feature.icon;
+                return (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 * idx }}
+                    whileHover={{ y: -8 }}
+                    className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 border border-gray-700 hover:border-gray-600 transition-all duration-300 backdrop-blur-sm hover:shadow-xl"
+                  >
+                    <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-full w-16 h-16 flex items-center justify-center mb-6 shadow-lg">
+                      <IconComponent size={32} className="text-white" />
+                    </div>
+                    <h4 className="text-xl font-bold text-white mb-3">{feature.title}</h4>
+                    <p className="text-gray-400 leading-relaxed">{feature.desc}</p>
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
+
+          {/* Call to Action */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+            className="bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 rounded-3xl p-12 text-center backdrop-blur-sm border border-orange-300 border-opacity-30 shadow-2xl"
+          >
+            <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">Ready to Order?</h3>
+            <p className="text-lg text-orange-50 mb-8 max-w-2xl mx-auto">
+              Start exploring our delicious menu and enjoy premium food delivery right to your doorstep.
+            </p>
+            <Link href="/menu">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-white text-orange-600 px-10 py-3 rounded-full font-bold text-lg hover:shadow-lg transition-all duration-300 hover:bg-orange-50"
+              >
+                Start Ordering Now
+              </motion.button>
+            </Link>
+          </motion.div>
         </div>
       </main>
 
