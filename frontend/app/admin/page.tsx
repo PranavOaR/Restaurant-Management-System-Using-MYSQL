@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
-import { Trash2, Plus, Edit2, BarChart3, ShoppingCart } from 'lucide-react';
+import { Trash2, Plus, Edit2, BarChart3, ShoppingCart, Search, Calendar } from 'lucide-react';
 
 interface Order {
   OrderID: number;
@@ -40,8 +40,27 @@ export default function AdminPage() {
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
   const [formData, setFormData] = useState<FormData>({ itemName: '', price: '' });
   const [menuLoading, setMenuLoading] = useState(false);
+  const [menuSearch, setMenuSearch] = useState('');
+  
+  // Order filter states
+  const [dateFilter, setDateFilter] = useState('');
 
   const adminPassword = 'admin123';
+
+  // Filter orders by date
+  const filteredOrders = useMemo(() => {
+    if (!dateFilter) return orders;
+    const filterDate = new Date(dateFilter).toDateString();
+    return orders.filter(order => new Date(order.OrderTime).toDateString() === filterDate);
+  }, [orders, dateFilter]);
+
+  // Filter menu items by search across all categories
+  const filteredMenuItems = useMemo(() => {
+    if (!menuSearch) return menuItems;
+    return menuItems.filter(item => 
+      item.ItemName.toLowerCase().includes(menuSearch.toLowerCase())
+    );
+  }, [menuItems, menuSearch]);
 
   const handleLogin = () => {
     if (password === adminPassword) {
@@ -346,6 +365,35 @@ export default function AdminPage() {
               </div>
             </div>
 
+            {/* Date Filter for Orders */}
+            <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-5 h-5 text-blue-600" />
+                  <label className="font-dm-sans font-semibold text-gray-700">Filter by Date:</label>
+                </div>
+                <input
+                  type="date"
+                  value={dateFilter}
+                  onChange={(e) => setDateFilter(e.target.value)}
+                  className="px-4 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 font-inter"
+                />
+                {dateFilter && (
+                  <button
+                    onClick={() => setDateFilter('')}
+                    className="px-4 py-2.5 bg-gray-600 hover:bg-gray-700 text-white font-dm-sans font-semibold rounded-xl transition duration-200"
+                  >
+                    Clear Filter
+                  </button>
+                )}
+              </div>
+              {dateFilter && (
+                <p className="mt-3 text-sm font-inter text-gray-600">
+                  Showing {filteredOrders.length} order(s) from {new Date(dateFilter).toLocaleDateString()}
+                </p>
+              )}
+            </div>
+
             {/* Recent Orders Table */}
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
               <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
@@ -364,7 +412,7 @@ export default function AdminPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {orders.map((order, idx) => (
+                    {filteredOrders.map((order, idx) => (
                       <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                         <td className="px-6 py-3 font-inter text-gray-800 font-semibold">#{order.OrderID}</td>
                         <td className="px-6 py-3 font-inter text-gray-800">{order.ItemName}</td>
@@ -472,18 +520,37 @@ export default function AdminPage() {
             {/* Menu Items List */}
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
               <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
-                <h2 className="text-xl font-dm-sans font-bold text-gray-800">
-                  {selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1)} Items
-                </h2>
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <h2 className="text-xl font-dm-sans font-bold text-gray-800">
+                    {selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1)} Items
+                  </h2>
+                  <div className="flex items-center gap-2 flex-1 md:flex-none md:w-80">
+                    <Search className="w-5 h-5 text-gray-400" />
+                    <input
+                      type="text"
+                      placeholder="Search menu items..."
+                      value={menuSearch}
+                      onChange={(e) => setMenuSearch(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-inter text-sm"
+                    />
+                  </div>
+                </div>
+                {menuSearch && (
+                  <p className="text-sm font-inter text-gray-600 mt-2">
+                    Found {filteredMenuItems.length} item(s) matching "{menuSearch}"
+                  </p>
+                )}
               </div>
 
               {menuLoading ? (
                 <div className="p-6 text-center">
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
                 </div>
-              ) : menuItems.length === 0 ? (
+              ) : filteredMenuItems.length === 0 ? (
                 <div className="p-6 text-center">
-                  <p className="text-gray-600 font-inter">No items in this category</p>
+                  <p className="text-gray-600 font-inter">
+                    {menuSearch ? `No items matching "${menuSearch}"` : 'No items in this category'}
+                  </p>
                 </div>
               ) : (
                 <div className="overflow-x-auto">
@@ -497,7 +564,7 @@ export default function AdminPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {menuItems.map((item, index) => (
+                      {filteredMenuItems.map((item, index) => (
                         <tr
                           key={item.SL}
                           className={`border-b border-gray-200 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-blue-50`}

@@ -6,7 +6,6 @@ import { motion } from 'framer-motion';
 import { ShoppingCart, Settings, Pizza, Zap, DollarSign } from 'lucide-react';
 import CardNav from './components/CardNav';
 import BlurText from './components/BlurText';
-import Silk from './components/Silk';
 import { Button as MovingBorderButton } from './components/ui/moving-border';
 
 export default function Home() {
