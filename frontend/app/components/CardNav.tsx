@@ -132,6 +132,13 @@ const CardNav: React.FC<CardNavProps> = ({
     return () => window.removeEventListener('resize', handleResize);
   }, [isExpanded]);
 
+  const handleGetStarted = () => {
+    const featuresSection = document.querySelector('#features');
+    if (featuresSection) {
+      featuresSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   const toggleMenu = () => {
     const tl = tlRef.current;
     if (!tl) return;
@@ -188,6 +195,7 @@ const CardNav: React.FC<CardNavProps> = ({
 
           <button
             type="button"
+            onClick={handleGetStarted}
             className="card-nav-cta-button hidden md:inline-flex border-0 rounded-[calc(0.75rem-0.2rem)] px-4 items-center h-full font-medium cursor-pointer transition-colors duration-300"
             style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
           >
