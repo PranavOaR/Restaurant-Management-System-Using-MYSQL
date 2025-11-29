@@ -14,10 +14,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        poppins: ['Poppins', 'sans-serif'],
-        playfair: ['Playfair Display', 'serif'],
-        montserrat: ['Montserrat', 'sans-serif'],
-        grotesk: ['Space Grotesk', 'sans-serif'],
+        inter: ['Inter', 'sans-serif'],
+        'dm-sans': ['DM Sans', 'sans-serif'],
+        lexend: ['Lexend', 'sans-serif'],
       },
       colors: {
         primary: '#4CAF50',

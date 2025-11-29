@@ -101,12 +101,12 @@ export default function Home() {
               delay={80}
               animateBy="words"
               direction="top"
-              className="text-6xl md:text-7xl font-playfair font-bold bg-gradient-to-r from-orange-600 via-pink-600 to-purple-600 bg-clip-text text-transparent mb-6"
+              className="text-5xl md:text-6xl font-dm-sans font-bold text-orange-600 mb-6"
             />
-            <p className="text-2xl md:text-3xl font-montserrat font-semibold text-orange-600 mb-2">
+            <p className="text-xl md:text-2xl font-dm-sans font-semibold text-orange-600 mb-2">
               Fast, Fresh, Delicious!
             </p>
-            <p className="text-lg text-gray-600 font-poppins">
+            <p className="text-base text-gray-600 font-inter">
               Order your favorite dishes now and enjoy premium quality food
             </p>
           </motion.div>
@@ -166,8 +166,8 @@ export default function Home() {
                 <div className="bg-white bg-opacity-80 backdrop-blur-md rounded-2xl p-8 border border-white border-opacity-30 shadow-lg hover:shadow-xl transition-all duration-300">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-gray-600 text-sm font-semibold font-poppins mb-2">Total Orders</p>
-                        <div className="text-4xl font-bold font-playfair text-orange-600">{stats.totalOrders}</div>
+                      <p className="text-gray-600 text-sm font-semibold font-inter mb-2">Total Orders</p>
+                        <div className="text-4xl font-bold font-dm-sans text-orange-600">{stats.totalOrders}</div>
                       </div>
                       <div className="bg-orange-100 rounded-full p-4 backdrop-blur-md">
                         <ShoppingCart size={32} className="text-orange-600" />
@@ -178,8 +178,8 @@ export default function Home() {
                   <div className="bg-white bg-opacity-80 backdrop-blur-md rounded-2xl p-8 border border-white border-opacity-30 shadow-lg hover:shadow-xl transition-all duration-300">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-gray-600 text-sm font-semibold font-poppins mb-2">Total Revenue</p>
-                        <div className="text-4xl font-bold font-playfair text-blue-600">Rs. {stats.totalRevenue}</div>
+                      <p className="text-gray-600 text-sm font-semibold font-inter mb-2">Total Revenue</p>
+                        <div className="text-4xl font-bold font-dm-sans text-blue-600">Rs. {stats.totalRevenue}</div>
                       </div>
                       <div className="bg-blue-100 rounded-full p-4 backdrop-blur-md">
                         <DollarSign size={32} className="text-blue-600" />
@@ -192,7 +192,7 @@ export default function Home() {
 
           {/* Features Grid */}
           <div className="mb-16" id="features">
-            <h3 className="text-4xl md:text-5xl font-playfair font-bold text-gray-800 text-center mb-12">Why Choose OrderXpress?</h3>
+            <h3 className="text-4xl md:text-5xl font-dm-sans font-bold text-gray-800 text-center mb-12">Why Choose OrderXpress?</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 { icon: Pizza, title: 'Premium Quality', desc: 'Handpicked ingredients sourced fresh daily for the best taste and nutrition' },
@@ -212,8 +212,8 @@ export default function Home() {
                     <div className="bg-gradient-to-br from-orange-500 to-pink-500 rounded-full w-16 h-16 flex items-center justify-center mb-6 shadow-lg">
                       <IconComponent size={32} className="text-white" />
                     </div>
-                    <h4 className="text-2xl font-playfair font-bold text-gray-800 mb-3">{feature.title}</h4>
-                    <p className="text-gray-600 leading-relaxed font-poppins">{feature.desc}</p>
+                    <h4 className="text-2xl font-dm-sans font-bold text-gray-800 mb-3">{feature.title}</h4>
+                    <p className="text-gray-600 leading-relaxed font-inter">{feature.desc}</p>
                   </motion.div>
                 );
               })}
@@ -227,8 +227,8 @@ export default function Home() {
             transition={{ delay: 0.6 }}
             className="bg-gradient-to-r from-orange-500 via-pink-500 to-red-500 rounded-3xl p-12 text-center backdrop-blur-sm border border-orange-300 border-opacity-50 shadow-2xl"
           >
-            <h3 className="text-4xl md:text-5xl font-playfair font-bold text-white mb-4">Ready to Order?</h3>
-            <p className="text-lg text-white mb-8 max-w-2xl mx-auto font-poppins">
+            <h3 className="text-4xl md:text-5xl font-dm-sans font-bold text-white mb-4">Ready to Order?</h3>
+            <p className="text-lg text-white mb-8 max-w-2xl mx-auto font-inter">
               Start exploring our delicious menu and enjoy premium food delivery right to your doorstep.
             </p>
             <Link href="/menu">
@@ -246,7 +246,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="bg-gradient-to-r from-gray-800 to-gray-900 bg-opacity-95 text-white py-8 mt-16 relative z-20">
-        <div className="container text-center font-poppins">
+        <div className="container text-center font-inter">
           <p>&copy; 2025 OrderXpress. All rights reserved.</p>
         </div>
       </footer>
