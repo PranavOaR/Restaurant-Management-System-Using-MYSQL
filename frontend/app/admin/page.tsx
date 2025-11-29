@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Trash2, Plus, Edit2 } from 'lucide-react';
+import { Trash2, Plus, Edit2, BarChart3, ShoppingCart } from 'lucide-react';
 
 interface Order {
   OrderID: number;
@@ -53,6 +53,12 @@ export default function AdminPage() {
     }
   };
 
+  const handleLogout = () => {
+    setAuthenticated(false);
+    setPassword('');
+    setActiveTab('orders');
+  };
+
   const fetchData = async () => {
     setLoading(true);
     try {
@@ -75,7 +81,9 @@ export default function AdminPage() {
       const categoriesData = await categoriesResponse.json();
       if (categoriesData.success) {
         setCategories(categoriesData.data);
-        setSelectedCategory(categoriesData.data[0]);
+        if (categoriesData.data.length > 0) {
+          setSelectedCategory(categoriesData.data[0]);
+        }
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -215,9 +223,9 @@ export default function AdminPage() {
 
   if (!authenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
-          <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">Admin Login</h1>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+          <h1 className="text-3xl font-dm-sans font-bold text-gray-800 mb-6 text-center">Admin Portal</h1>
           <div className="space-y-4">
             <input
               type="password"
@@ -225,13 +233,19 @@ export default function AdminPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
-              className="input"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 font-inter"
               autoFocus
             />
-            <button onClick={handleLogin} className="w-full btn-secondary text-lg py-2">
+            <button 
+              onClick={handleLogin}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-dm-sans font-semibold py-2.5 rounded-xl transition duration-200"
+            >
               Login
             </button>
-            <Link href="/" className="block text-center btn" style={{ backgroundColor: '#757575', color: 'white' }}>
+            <Link 
+              href="/" 
+              className="block text-center bg-gray-600 hover:bg-gray-700 text-white font-dm-sans font-semibold py-2.5 rounded-xl transition duration-200"
+            >
               Back to Home
             </Link>
           </div>
@@ -241,134 +255,142 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="container py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-800">👨‍💼 Admin Panel</h1>
-          <Link href="/" className="btn-secondary">
-            Home
-          </Link>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-4xl font-dm-sans font-bold text-gray-800 mb-2">Admin Dashboard</h1>
+            <p className="text-gray-600 font-inter">Manage your restaurant operations and menu</p>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="bg-red-600 hover:bg-red-700 text-white font-dm-sans font-semibold px-6 py-2.5 rounded-xl transition duration-200"
+          >
+            Logout
+          </button>
         </div>
-      </header>
 
-      {/* Tab Navigation */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="container flex gap-4 py-4">
+        {/* Tab Navigation */}
+        <div className="flex gap-4 mb-8 border-b border-gray-200">
           <button
             onClick={() => setActiveTab('orders')}
-            className={`px-6 py-2 font-semibold rounded-lg transition ${
+            className={`px-6 py-3 font-dm-sans font-semibold rounded-t-xl transition duration-200 flex items-center gap-2 ${
               activeTab === 'orders'
                 ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
             }`}
           >
-            📋 Orders & Stats
+            <ShoppingCart className="w-5 h-5" />
+            Orders & Stats
           </button>
           <button
             onClick={() => setActiveTab('menu')}
-            className={`px-6 py-2 font-semibold rounded-lg transition ${
+            className={`px-6 py-3 font-dm-sans font-semibold rounded-t-xl transition duration-200 flex items-center gap-2 ${
               activeTab === 'menu'
                 ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
             }`}
           >
-            🍽️ Menu Management
+            <BarChart3 className="w-5 h-5" />
+            Menu Management
           </button>
         </div>
-      </div>
 
-      <main className="container py-8">
-        {/* Orders Tab */}
-        {activeTab === 'orders' && (
-          <>
-            {/* Statistics */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-white rounded-lg shadow p-6">
-                <div className="text-center">
-                  <div className="text-4xl font-bold text-green-600">{stats.totalOrders}</div>
-                  <p className="text-gray-600 mt-2">Total Orders</p>
-                </div>
-              </div>
+        {/* Loading State */}
+        {loading && (
+          <div className="flex items-center justify-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          </div>
+        )}
 
-              <div className="bg-white rounded-lg shadow p-6">
-                <div className="text-center">
-                  <div className="text-4xl font-bold text-blue-600">Rs. {stats.totalRevenue}</div>
-                  <p className="text-gray-600 mt-2">Total Revenue</p>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-lg shadow p-6">
-                <div className="text-center">
-                  <div className="text-4xl font-bold text-purple-600">
-                    {stats.totalOrders > 0 ? (stats.totalRevenue / stats.totalOrders).toFixed(2) : 0}
+        {/* Orders & Stats Tab */}
+        {activeTab === 'orders' && !loading && (
+          <div className="space-y-8">
+            {/* Statistics Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 shadow-lg border border-green-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-gray-600 font-inter text-sm">Total Orders</p>
+                    <p className="text-4xl font-dm-sans font-bold text-green-700 mt-2">
+                      {stats.totalOrders || 0}
+                    </p>
                   </div>
-                  <p className="text-gray-600 mt-2">Average Order Value</p>
+                  <ShoppingCart className="w-12 h-12 text-green-600 opacity-20" />
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 shadow-lg border border-blue-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-gray-600 font-inter text-sm">Total Revenue</p>
+                    <p className="text-4xl font-dm-sans font-bold text-blue-700 mt-2">
+                      Rs. {stats.totalRevenue || 0}
+                    </p>
+                  </div>
+                  <BarChart3 className="w-12 h-12 text-blue-600 opacity-20" />
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 shadow-lg border border-purple-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-gray-600 font-inter text-sm">Avg Order Value</p>
+                    <p className="text-4xl font-dm-sans font-bold text-purple-700 mt-2">
+                      Rs. {stats.totalOrders > 0 ? (stats.totalRevenue / stats.totalOrders).toFixed(0) : 0}
+                    </p>
+                  </div>
+                  <Trash2 className="w-12 h-12 text-purple-600 opacity-20" />
                 </div>
               </div>
             </div>
 
-            {/* Orders Table */}
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-              <div className="p-6 border-b border-gray-200">
-                <h2 className="text-2xl font-bold text-gray-800">📋 Orders</h2>
+            {/* Recent Orders Table */}
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
+              <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                <h2 className="text-xl font-dm-sans font-bold text-gray-800">Recent Orders</h2>
               </div>
-
-              {loading ? (
-                <div className="p-6 text-center">
-                  <p className="text-gray-600">Loading...</p>
-                </div>
-              ) : orders.length === 0 ? (
-                <div className="p-6 text-center">
-                  <p className="text-gray-600">No orders found</p>
-                </div>
-              ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead className="bg-gray-100 border-b border-gray-200">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Order ID</th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Item Name</th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Price</th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Quantity</th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Total Price</th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Order Time</th>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-100 border-b border-gray-200">
+                    <tr>
+                      <th className="px-6 py-3 text-left font-dm-sans font-semibold text-gray-700">Order ID</th>
+                      <th className="px-6 py-3 text-left font-dm-sans font-semibold text-gray-700">Item Name</th>
+                      <th className="px-6 py-3 text-left font-dm-sans font-semibold text-gray-700">Price</th>
+                      <th className="px-6 py-3 text-left font-dm-sans font-semibold text-gray-700">Quantity</th>
+                      <th className="px-6 py-3 text-left font-dm-sans font-semibold text-gray-700">Total Price</th>
+                      <th className="px-6 py-3 text-left font-dm-sans font-semibold text-gray-700">Order Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orders.map((order, idx) => (
+                      <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                        <td className="px-6 py-3 font-inter text-gray-800 font-semibold">#{order.OrderID}</td>
+                        <td className="px-6 py-3 font-inter text-gray-800">{order.ItemName}</td>
+                        <td className="px-6 py-3 font-inter text-gray-800">Rs. {order.Price}</td>
+                        <td className="px-6 py-3 font-inter text-gray-800">{order.Quantity}</td>
+                        <td className="px-6 py-3 font-inter text-gray-800 font-semibold text-green-600">Rs. {order.TotalPrice}</td>
+                        <td className="px-6 py-3 font-inter text-gray-600 text-sm">{new Date(order.OrderTime).toLocaleString()}</td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {orders.map((order, index) => (
-                        <tr
-                          key={order.OrderID}
-                          className={`border-b border-gray-200 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-blue-50`}
-                        >
-                          <td className="px-6 py-3 text-sm text-gray-800 font-semibold">#{order.OrderID}</td>
-                          <td className="px-6 py-3 text-sm text-gray-800">{order.ItemName}</td>
-                          <td className="px-6 py-3 text-sm text-gray-800">Rs. {order.Price}</td>
-                          <td className="px-6 py-3 text-sm text-gray-800">{order.Quantity}</td>
-                          <td className="px-6 py-3 text-sm font-semibold text-green-600">Rs. {order.TotalPrice}</td>
-                          <td className="px-6 py-3 text-sm text-gray-600">
-                            {new Date(order.OrderTime).toLocaleString()}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </>
+          </div>
         )}
 
         {/* Menu Management Tab */}
-        {activeTab === 'menu' && (
-          <>
+        {activeTab === 'menu' && !loading && (
+          <div className="space-y-8">
             {/* Category Selection */}
-            <div className="bg-white rounded-lg shadow p-6 mb-8">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">Select Category</h2>
+            <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
+              <label className="block font-dm-sans font-semibold text-gray-700 mb-3">Select Category</label>
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full md:w-1/3 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full md:w-1/3 px-4 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 font-inter"
               >
                 {categories.map((cat) => (
                   <option key={cat} value={cat}>
@@ -380,42 +402,52 @@ export default function AdminPage() {
 
             {/* Add/Edit Form */}
             {(showAddForm || editingItem) && (
-              <div className="bg-white rounded-lg shadow p-6 mb-8">
-                <h2 className="text-2xl font-bold text-gray-800 mb-6">
-                  {editingItem ? '✏️ Edit Item' : '➕ Add New Item'}
+              <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
+                <h2 className="text-2xl font-dm-sans font-bold text-gray-800 mb-6 flex items-center gap-2">
+                  {editingItem ? (
+                    <>
+                      <Edit2 className="w-6 h-6" />
+                      Edit Item
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="w-6 h-6" />
+                      Add New Item
+                    </>
+                  )}
                 </h2>
                 <form onSubmit={editingItem ? handleUpdateItem : handleAddItem} className="space-y-4">
                   <div>
-                    <label className="block text-gray-700 font-semibold mb-2">Item Name</label>
+                    <label className="block font-dm-sans font-semibold text-gray-700 mb-2">Item Name</label>
                     <input
                       type="text"
                       value={formData.itemName}
                       onChange={(e) => setFormData({ ...formData, itemName: e.target.value })}
                       placeholder="Enter item name"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 font-inter"
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-700 font-semibold mb-2">Price (Rs.)</label>
+                    <label className="block font-dm-sans font-semibold text-gray-700 mb-2">Price (Rs.)</label>
                     <input
                       type="number"
                       value={formData.price}
                       onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                       placeholder="Enter price"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 font-inter"
                     />
                   </div>
-                  <div className="flex gap-3">
+                  <div className="flex gap-3 pt-4">
                     <button
                       type="submit"
-                      className="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition"
+                      className="flex-1 bg-green-600 hover:bg-green-700 text-white font-dm-sans font-semibold py-2.5 rounded-xl transition duration-200"
                     >
                       {editingItem ? 'Update Item' : 'Add Item'}
                     </button>
                     <button
                       type="button"
                       onClick={editingItem ? cancelEdit : () => setShowAddForm(false)}
-                      className="bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-gray-700 transition"
+                      className="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-dm-sans font-semibold py-2.5 rounded-xl transition duration-200"
                     >
                       Cancel
                     </button>
@@ -426,42 +458,42 @@ export default function AdminPage() {
 
             {/* Add Item Button */}
             {!showAddForm && !editingItem && (
-              <div className="mb-8">
+              <div className="mb-4">
                 <button
                   onClick={() => setShowAddForm(true)}
-                  className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-dm-sans font-semibold px-6 py-2.5 rounded-xl transition duration-200"
                 >
-                  <Plus size={20} />
+                  <Plus className="w-5 h-5" />
                   Add New Item
                 </button>
               </div>
             )}
 
             {/* Menu Items List */}
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-              <div className="p-6 border-b border-gray-200">
-                <h2 className="text-2xl font-bold text-gray-800">
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
+              <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                <h2 className="text-xl font-dm-sans font-bold text-gray-800">
                   {selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1)} Items
                 </h2>
               </div>
 
               {menuLoading ? (
                 <div className="p-6 text-center">
-                  <p className="text-gray-600">Loading items...</p>
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
                 </div>
               ) : menuItems.length === 0 ? (
                 <div className="p-6 text-center">
-                  <p className="text-gray-600">No items in this category</p>
+                  <p className="text-gray-600 font-inter">No items in this category</p>
                 </div>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead className="bg-gray-100 border-b border-gray-200">
                       <tr>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Item ID</th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Name</th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Price</th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Actions</th>
+                        <th className="px-6 py-3 text-left font-dm-sans font-semibold text-gray-700">Item ID</th>
+                        <th className="px-6 py-3 text-left font-dm-sans font-semibold text-gray-700">Name</th>
+                        <th className="px-6 py-3 text-left font-dm-sans font-semibold text-gray-700">Price</th>
+                        <th className="px-6 py-3 text-left font-dm-sans font-semibold text-gray-700">Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -470,23 +502,23 @@ export default function AdminPage() {
                           key={item.SL}
                           className={`border-b border-gray-200 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-blue-50`}
                         >
-                          <td className="px-6 py-3 text-sm text-gray-800 font-semibold">#{item.SL}</td>
-                          <td className="px-6 py-3 text-sm text-gray-800">{item.ItemName}</td>
-                          <td className="px-6 py-3 text-sm text-gray-800">Rs. {item.Price}</td>
-                          <td className="px-6 py-3 text-sm">
+                          <td className="px-6 py-3 font-inter text-gray-800 font-semibold">#{item.SL}</td>
+                          <td className="px-6 py-3 font-inter text-gray-800">{item.ItemName}</td>
+                          <td className="px-6 py-3 font-inter text-gray-800 font-semibold text-blue-600">Rs. {item.Price}</td>
+                          <td className="px-6 py-3">
                             <div className="flex gap-2">
                               <button
                                 onClick={() => startEditItem(item)}
-                                className="flex items-center gap-1 bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600 transition"
+                                className="flex items-center gap-1 bg-orange-500 hover:bg-orange-600 text-white font-dm-sans font-semibold px-3 py-1.5 rounded-lg transition duration-200"
                               >
-                                <Edit2 size={16} />
+                                <Edit2 className="w-4 h-4" />
                                 Edit
                               </button>
                               <button
                                 onClick={() => handleDeleteItem(item.SL)}
-                                className="flex items-center gap-1 bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition"
+                                className="flex items-center gap-1 bg-red-600 hover:bg-red-700 text-white font-dm-sans font-semibold px-3 py-1.5 rounded-lg transition duration-200"
                               >
-                                <Trash2 size={16} />
+                                <Trash2 className="w-4 h-4" />
                                 Delete
                               </button>
                             </div>
@@ -498,9 +530,9 @@ export default function AdminPage() {
                 </div>
               )}
             </div>
-          </>
+          </div>
         )}
-      </main>
+      </div>
     </div>
   );
 }
