@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ShoppingCart, Settings, Pizza, Zap, DollarSign } from 'lucide-react';
+import CardNav from './components/CardNav';
 import Silk from './components/Silk';
 
 export default function Home() {
@@ -28,6 +29,36 @@ export default function Home() {
     fetchStats();
   }, []);
 
+  const navItems = [
+    {
+      label: "Menu",
+      bgColor: "#10B981",
+      textColor: "#fff",
+      links: [
+        { label: "Browse Items", href: "/menu", ariaLabel: "Browse Menu Items" },
+        { label: "Categories", href: "/menu", ariaLabel: "Food Categories" }
+      ]
+    },
+    {
+      label: "Admin",
+      bgColor: "#3B82F6",
+      textColor: "#fff",
+      links: [
+        { label: "Dashboard", href: "/admin", ariaLabel: "Admin Dashboard" },
+        { label: "Manage Menu", href: "/admin", ariaLabel: "Manage Menu Items" }
+      ]
+    },
+    {
+      label: "Info",
+      bgColor: "#F59E0B",
+      textColor: "#fff",
+      links: [
+        { label: "About Us", href: "#about", ariaLabel: "About OrderXpress" },
+        { label: "Contact", href: "#contact", ariaLabel: "Contact Us" }
+      ]
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-gray-900 relative overflow-hidden">
       {/* Silk Background Animation */}
@@ -43,25 +74,18 @@ export default function Home() {
 
       {/* Content Overlay */}
       <div className="relative z-10">
-      {/* Header */}
-      <header className="bg-white bg-opacity-95 shadow-sm relative z-20">
-        <div className="container py-4 flex justify-between items-center">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
-            OrderXpress
-          </h1>
-          <nav className="flex gap-4">
-            <Link href="/menu" className="btn-primary">
-              Place Order
-            </Link>
-            <Link href="/admin" className="btn-secondary">
-              Admin Panel
-            </Link>
-          </nav>
-        </div>
-      </header>
+        {/* Card Nav */}
+        <CardNav
+          items={navItems}
+          baseColor="#1F2937"
+          menuColor="#fff"
+          buttonBgColor="#FF6B35"
+          buttonTextColor="#fff"
+          ease="power3.out"
+        />
 
       {/* Main Content */}
-      <main className="container py-20">
+      <main className="container py-20 pt-40">
         <div className="max-w-6xl mx-auto">
           {/* Welcome Section */}
           <motion.div
