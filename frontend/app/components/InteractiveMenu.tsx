@@ -168,7 +168,7 @@ export function InteractiveMenu({
             'bg-white',
             'border border-gray-300',
             'sticky top-4',
-            'max-h-[calc(100vh-100px)]'
+            'h-[calc(100vh-120px)]'
           )}
         >
           {/* Cart Header */}
