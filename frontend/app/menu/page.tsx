@@ -119,9 +119,9 @@ export default function MenuPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50">
       {/* Header */}
-      <header className="bg-white dark:bg-zinc-900 shadow-sm sticky top-0 z-20">
+      <header className="bg-white shadow-sm sticky top-0 z-20 border-b border-gray-200">
         <div className="container py-4 flex justify-between items-center">
           <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
             OrderXpress
@@ -153,7 +153,7 @@ export default function MenuPage() {
               placeholder="Search for dishes..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white focus:outline-none focus:border-orange-500 transition"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-300 bg-white text-gray-900 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition"
             />
           </div>
 
@@ -161,7 +161,7 @@ export default function MenuPage() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 dark:border-zinc-700 dark:bg-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-700 transition"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-300 bg-white hover:bg-gray-50 transition"
             >
               <Sliders className="w-4 h-4" />
               Filters
@@ -170,7 +170,7 @@ export default function MenuPage() {
               <motion.div
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="flex items-center gap-4 px-4 py-2 rounded-xl border border-gray-200 dark:border-zinc-700 dark:bg-zinc-800"
+                className="flex items-center gap-4 px-4 py-2 rounded-xl border border-gray-300 bg-white"
               >
                 <span className="text-sm font-medium">Price:</span>
                 <input
@@ -203,7 +203,7 @@ export default function MenuPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <h2 className="text-lg font-dm-sans font-semibold text-gray-900 dark:text-gray-100 mb-4">
+          <h2 className="text-lg font-dm-sans font-semibold text-gray-900 mb-4">
             Select Category
           </h2>
           <div className="flex flex-wrap gap-2">
@@ -216,7 +216,7 @@ export default function MenuPage() {
                 className={`px-4 py-2 rounded-xl font-medium transition-all ${
                   selectedCategory === category
                     ? 'bg-orange-500 text-white shadow-lg'
-                    : 'bg-white dark:bg-zinc-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-zinc-700 hover:border-orange-500'
+                    : 'bg-white text-gray-700 border border-gray-300 hover:border-orange-500 hover:shadow-md'
                 }`}
               >
                 {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -230,7 +230,7 @@ export default function MenuPage() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="mb-4 text-sm text-gray-600 dark:text-gray-400"
+            className="mb-4 text-sm text-gray-700"
           >
             Found {filteredItems.length} item{filteredItems.length !== 1 ? 's' : ''}
           </motion.div>
@@ -243,7 +243,7 @@ export default function MenuPage() {
             transition={{ repeat: Infinity, duration: 1.5 }}
             className="text-center py-12"
           >
-            <p className="text-gray-600 dark:text-gray-400">Loading menu items...</p>
+            <p className="text-gray-700">Loading menu items...</p>
           </motion.div>
         ) : (
           <InteractiveMenu
@@ -257,7 +257,7 @@ export default function MenuPage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8 mt-16">
+      <footer className="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-8 mt-16">
         <div className="container text-center">
           <p>&copy; 2025 OrderXpress Restaurant. All rights reserved.</p>
         </div>
@@ -293,7 +293,7 @@ function OrderSuccessModal() {
       className="fixed inset-0 flex items-center justify-center z-50 bg-black/50"
     >
       <motion.div
-        className="bg-white dark:bg-zinc-900 rounded-2xl p-8 text-center max-w-md shadow-2xl"
+        className="bg-white rounded-2xl p-8 text-center max-w-md shadow-2xl border border-gray-200"
         initial={{ y: 20 }}
         animate={{ y: 0 }}
       >
@@ -306,7 +306,7 @@ function OrderSuccessModal() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
         </motion.div>
-        <h2 className="text-2xl font-dm-sans font-bold text-gray-900 dark:text-white mb-2">
+        <h2 className="text-2xl font-dm-sans font-bold text-gray-900 mb-2">
           Order Confirmed!
         </h2>
         <p className="text-gray-600 dark:text-gray-400">

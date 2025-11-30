@@ -125,20 +125,20 @@ export function InteractiveMenu({
               transition={{ duration: 0.2 }}
               className={cn(
                 'group p-4 rounded-xl',
-                'bg-white dark:bg-zinc-900',
-                'border border-gray-200 dark:border-zinc-800',
-                'hover:border-orange-300 dark:hover:border-orange-700',
+                'bg-white',
+                'border border-gray-300',
+                'hover:border-orange-400',
                 'hover:shadow-lg transition-all duration-200'
               )}
             >
               <div className="flex items-center justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                    <h3 className="text-sm font-medium text-gray-900">
                       {item.ItemName}
                     </h3>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
                     <span className="font-semibold text-orange-600 dark:text-orange-400">
                       Rs. {item.Price}
                     </span>
@@ -165,8 +165,8 @@ export function InteractiveMenu({
           className={cn(
             'w-80 flex flex-col',
             'p-4 rounded-xl',
-            'bg-white dark:bg-zinc-900',
-            'border border-gray-200 dark:border-zinc-800',
+            'bg-white',
+            'border border-gray-300',
             'sticky top-4',
             'max-h-[calc(100vh-100px)]'
           )}
@@ -174,7 +174,7 @@ export function InteractiveMenu({
           {/* Cart Header */}
           <div className="flex items-center gap-2 mb-4">
             <ShoppingCart className="w-4 h-4 text-orange-600" />
-            <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+            <h2 className="text-sm font-semibold text-gray-900">
               🛒 Order Summary ({totalItems})
             </h2>
           </div>
@@ -193,7 +193,7 @@ export function InteractiveMenu({
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="flex items-center justify-center h-40 text-gray-500 text-sm"
+                  className="flex items-center justify-center h-40 text-gray-600 text-sm"
                 >
                   Your cart is empty
                 </motion.div>
@@ -208,21 +208,21 @@ export function InteractiveMenu({
                     transition={{ opacity: { duration: 0.2 }, layout: { duration: 0.2 } }}
                     className={cn(
                       'flex items-center gap-2 p-3 rounded-lg',
-                      'bg-gray-50 dark:bg-zinc-800/50',
-                      'hover:bg-gray-100 dark:hover:bg-zinc-800',
+                      'bg-gray-50',
+                      'hover:bg-gray-100',
                       'transition-colors'
                     )}
                   >
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-medium text-gray-900 dark:text-gray-100 truncate">
+                        <span className="text-xs font-medium text-gray-900 truncate">
                           {item.ItemName}
                         </span>
                         <motion.button
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.95 }}
                           onClick={() => removeFromCart(item.SL, item.category || '')}
-                          className="p-1 rounded hover:bg-gray-200 dark:hover:bg-zinc-700"
+                          className="p-1 rounded hover:bg-gray-200"
                         >
                           <X className="w-3 h-3 text-gray-400" />
                         </motion.button>
@@ -235,23 +235,23 @@ export function InteractiveMenu({
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => updateQuantity(item.SL, -1, item.category || '')}
-                            className="p-0.5 rounded hover:bg-gray-200 dark:hover:bg-zinc-700"
+                            className="p-0.5 rounded hover:bg-gray-200"
                           >
                             <Minus className="w-3 h-3" />
                           </motion.button>
-                          <motion.span layout className="text-xs text-gray-600 dark:text-gray-400 w-6 text-center font-medium">
+                          <motion.span layout className="text-xs text-gray-700 w-6 text-center font-medium">
                             {item.quantity}
                           </motion.span>
                           <motion.button
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => updateQuantity(item.SL, 1, item.category || '')}
-                            className="p-0.5 rounded hover:bg-gray-200 dark:hover:bg-zinc-700"
+                            className="p-0.5 rounded hover:bg-gray-200"
                           >
                             <Plus className="w-3 h-3" />
                           </motion.button>
                         </div>
-                        <motion.span layout className="text-xs font-semibold text-orange-600 dark:text-orange-400">
+                        <motion.span layout className="text-xs font-semibold text-orange-600">
                           Rs. {(item.Price * item.quantity).toFixed(2)}
                         </motion.span>
                       </div>
@@ -267,33 +267,33 @@ export function InteractiveMenu({
             layout
             className={cn(
               'pt-3 mt-3',
-              'border-t border-gray-200 dark:border-zinc-800',
-              'bg-white dark:bg-zinc-900',
+              'border-t border-gray-300',
+              'bg-white',
               'space-y-2'
             )}
           >
-            <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400">
+            <div className="flex items-center justify-between text-xs text-gray-700">
               <span>Subtotal:</span>
               <motion.span layout className="font-medium">
                 Rs. {subtotal.toFixed(2)}
               </motion.span>
             </div>
-            <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400">
+            <div className="flex items-center justify-between text-xs text-gray-700">
               <span>CGST (2.5%):</span>
               <motion.span layout className="font-medium">
                 Rs. {cgst.toFixed(2)}
               </motion.span>
             </div>
-            <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400">
+            <div className="flex items-center justify-between text-xs text-gray-700">
               <span>SGST (2.5%):</span>
               <motion.span layout className="font-medium">
                 Rs. {sgst.toFixed(2)}
               </motion.span>
             </div>
 
-            <div className="pt-2 border-t border-gray-200 dark:border-zinc-800 flex items-center justify-between">
-              <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">Total:</span>
-              <motion.span layout className="text-sm font-bold text-orange-600 dark:text-orange-400">
+            <div className="pt-2 border-t border-gray-300 flex items-center justify-between">
+              <span className="text-sm font-semibold text-gray-900">Total:</span>
+              <motion.span layout className="text-sm font-bold text-orange-600">
                 <NumberFlow value={totalPrice} />
               </motion.span>
             </div>
